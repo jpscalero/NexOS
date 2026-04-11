@@ -1,0 +1,27 @@
+{
+    "name": "NexOS Dev Environment",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": true,
+            "configureZshOhMyZsh": true,
+            "upgradePackages": true
+        },
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.azure-account",
+                "ms-azuretools.vscode-docker",
+                "timonwong.shellcheck",
+                "github.vscode-github-actions",
+                "davidanson.vscode-markdownlint"
+            ]
+        }
+    },
+    "postCreateCommand": "sudo chmod +x ./scripts/setup_host.sh && sudo ./scripts/setup_host.sh",
+    "remoteUser": "vscode"
+}
