@@ -15,10 +15,16 @@ fi
 # Set password
 echo "$USERNAME:$PASSWORD" | chpasswd
 
-# Add to essential groups
-usermod -aG sudo,audio,video,cdrom,netdev,wireshark "$USERNAME"
+# Add to essential groups (check existence for robustness)
+for group in sudo audio video cdrom netdev wireshark; do
+    if ! getent group "$group" >/dev/null; then
+        echo "Creating group $group..."
+        groupadd -r "$group"
+    fi
+    usermod -aG "$group" "$USERNAME"
+done
 
-# Configure passwordless sudo for live session (optional but common)
+# Configure passwordless sudo for live session
 echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/nexos
 chmod 0440 /etc/sudoers.d/nexos
 
