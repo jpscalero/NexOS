@@ -41,6 +41,7 @@ lb config \
     --mirror-binary "http://deb.debian.org/debian/" \
     --parent-mirror-bootstrap "http://deb.debian.org/debian/" \
     --parent-mirror-binary "http://deb.debian.org/debian/" \
+    --security false \
     --linux-packages "linux-image-amd64" \
     --bootloader "grub-efi" \
     --apt-recommends false \
