@@ -6,6 +6,8 @@
 
 <p align="center">
   <strong>La distribución Debian 13 (Trixie) definitiva para Pentesting, Servidores y Aprendizaje Experimental.</strong>
+  <br>
+  <em>Soporte Dual Boot: Compatible con BIOS/Legacy y UEFI.</em>
 </p>
 
 <p align="center">

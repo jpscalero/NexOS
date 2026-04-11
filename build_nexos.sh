@@ -22,9 +22,9 @@ fi
 export DEBIAN_FRONTEND=noninteractive
 
 # 1. Install dependencies if not present
-log "Ensuring dependencies (live-build, debootstrap, curl) are installed..."
+log "Ensuring dependencies (live-build, debootstrap, curl, isolinux, xorriso) are installed..."
 apt-get update -qq
-apt-get install -y -qq live-build debootstrap curl
+apt-get install -y -qq live-build debootstrap curl isolinux xorriso
 
 # 2. Initialize workspace
 log "Initializing live-build configuration..."
@@ -35,7 +35,8 @@ lb config \
     --distribution trixie \
     --archive-areas "main contrib non-free non-free-firmware" \
     --linux-packages "linux-image" \
-    --bootloader "grub-efi" \
+    --binary-images iso-hybrid \
+    --bootloaders "isolinux,grub-efi" \
     --apt-recommends false \
     --memtest none \
     --source false \
