@@ -34,7 +34,6 @@ lb clean --all
 lb config \
     --distribution trixie \
     --archive-areas "main contrib non-free non-free-firmware" \
-    --image-name "nexos-v1-amd64.iso" \
     --linux-packages "linux-image-amd64" \
     --bootloader "grub-efi" \
     --apt-recommends false \
@@ -46,7 +45,13 @@ lb config \
 log "Starting the build process. This may take 20-45 minutes..."
 lb build
 
-if [ -f nexos-v1-amd64.iso ]; then
+# Find the generated ISO (standard name is usually live-image-amd64.hybrid.iso)
+GENERATED_ISO=$(ls *.iso 2>/dev/null | head -n 1)
+
+if [ -n "$GENERATED_ISO" ]; then
+    if [ "$GENERATED_ISO" != "nexos-v1-amd64.iso" ]; then
+        mv "$GENERATED_ISO" nexos-v1-amd64.iso
+    fi
     log "${GREEN}Build successful! ISO generated: nexos-v1-amd64.iso${NC}"
 else
     error "ISO was not generated. Check logs above for specific errors."
