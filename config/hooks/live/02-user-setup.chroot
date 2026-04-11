@@ -1,0 +1,25 @@
+#!/bin/bash
+# Create default user NexOS
+set -e
+
+USERNAME="nexos"
+PASSWORD="nexos"
+
+echo "Setting up user: $USERNAME"
+
+# Create user if it doesn't exist
+if ! id "$USERNAME" &>/dev/null; then
+    useradd -m -s /bin/bash "$USERNAME"
+fi
+
+# Set password
+echo "$USERNAME:$PASSWORD" | chpasswd
+
+# Add to essential groups
+usermod -aG sudo,audio,video,cdrom,netdev,wireshark "$USERNAME"
+
+# Configure passwordless sudo for live session (optional but common)
+echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/nexos
+chmod 0440 /etc/sudoers.d/nexos
+
+echo "User setup complete."

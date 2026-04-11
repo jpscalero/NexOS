@@ -1,0 +1,10 @@
+#!/bin/bash
+# Install Metasploit Framework via official Rapid7 repo
+set -e
+
+echo "Installing Metasploit Framework..."
+curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall
+chmod 755 msfinstall
+./msfinstall
+rm msfinstall
+echo "Metasploit installed successfully."

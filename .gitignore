@@ -1,0 +1,25 @@
+# live-build temporary directories
+.build/
+chroot/
+binary/
+cache/
+auto/
+local/
+
+# Build artifacts
+*.iso
+*.zsync
+*.contents
+*.packages
+*.debian.tar.xz
+*.dsc
+*.changes
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# User specific configs if any
+*.swp
+*~

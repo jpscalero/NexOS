@@ -1,0 +1,10 @@
+# Server Software
+openssh-server
+nginx
+mariadb-server
+ufw
+net-tools
+dnsutils
+iputils-ping
+rsync
+fail2ban

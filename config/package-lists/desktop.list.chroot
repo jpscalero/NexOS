@@ -1,0 +1,25 @@
+# KDE Plasma Desktop & Core
+kde-plasma-desktop
+sddm
+plasma-nm
+konsole
+dolphin
+kate
+gwenview
+okular
+network-manager
+network-manager-gnome
+xorg
+breeze-gtk-theme
+kde-config-gtk-style
+firmware-linux
+firmware-linux-nonfree
+firmware-realtek
+firmware-iwlwifi
+sudo
+bash-completion
+neofetch
+htop
+curl
+wget
+git

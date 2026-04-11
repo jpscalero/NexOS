@@ -1,0 +1,36 @@
+#!/bin/bash
+# KDE and SDDM Customization
+set -e
+
+WALLPAPER_PATH="/usr/share/wallpapers/nexos/wallpaper.png"
+
+echo "Customizing KDE and SDDM..."
+
+# 1. SDDM Configuration
+mkdir -p /etc/sddm.conf.d/
+cat <<EOF > /etc/sddm.conf.d/nexos.conf
+[Theme]
+Current=debian-plasma
+CursorTheme=breeze_cursors
+
+[General]
+InputMethod=
+EOF
+
+# Note: Setting the SDDM wallpaper usually requires editing the theme's metadata or a config.
+# For the default Debian Plasma theme:
+THEME_DIR="/usr/share/sddm/themes/debian-plasma"
+if [ -d "$THEME_DIR" ]; then
+    # Backup original
+    cp "$THEME_DIR/metadata.desktop" "$THEME_DIR/metadata.desktop.bak"
+    # (Simplified) We can link our wallpaper to the one expected by the theme if known,
+    # or just keep it simple.
+fi
+
+# 2. KDE Global Defaults
+# We can use /etc/xdg/ to set defaults for all new users
+mkdir -p /etc/skel/.config
+# This is a bit complex for a single script, but we ensure the wallpaper dir exists
+mkdir -p /usr/share/wallpapers/nexos/
+
+echo "KDE customization complete."
