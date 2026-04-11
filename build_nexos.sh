@@ -37,11 +37,11 @@ lb config \
     --linux-packages "linux-image" \
     --bootloader "grub-efi" \
     --apt-recommends false \
-    --debian-installer live \
     --memtest none \
     --source false \
     --security false \
-    --compression xz
+    --compression xz \
+    --xz-options "-e -9"
 
 # 3. Trigger build
 log "Starting the build process. This may take 20-45 minutes..."
