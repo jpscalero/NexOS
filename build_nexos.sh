@@ -32,22 +32,15 @@ lb clean --all
 
 # Configuration for Debian 13 (Trixie)
 lb config \
-    --mode debian \
-    --system live \
     --distribution trixie \
-    --parent-distribution trixie \
     --archive-areas "main contrib non-free non-free-firmware" \
-    --mirror-bootstrap "http://deb.debian.org/debian" \
-    --mirror-binary "http://deb.debian.org/debian" \
-    --parent-mirror-bootstrap "http://deb.debian.org/debian" \
-    --parent-mirror-binary "http://deb.debian.org/debian" \
-    --security false \
     --linux-packages "linux-image-amd64" \
     --bootloader "grub-efi" \
     --apt-recommends false \
     --debian-installer live \
     --memtest none \
-    --source false
+    --source false \
+    --security false
 
 # 3. Trigger build
 log "Starting the build process. This may take 20-45 minutes..."

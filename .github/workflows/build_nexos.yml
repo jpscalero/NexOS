@@ -11,26 +11,20 @@ jobs:
   build:
     name: Build ISO
     runs-on: ubuntu-latest
+    container:
+      image: debian:trixie
+      options: --privileged # Crucial for live-build to mount filesystems
     permissions:
-      contents: write # Needed for creating releases
+      contents: write
     
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Maximize Build Space
-      run: |
-        sudo rm -rf /usr/share/dotnet
-        sudo rm -rf /usr/local/lib/android
-        sudo rm -rf /opt/ghc
-        sudo rm -rf /opt/hostedtoolcache/CodeQL
-        sudo docker image prune --all --force
-        df -h
-
     - name: Setup Build Environment
       run: |
-        sudo apt-get update
-        sudo apt-get install -y live-build debootstrap curl dos2unix
+        apt-get update
+        apt-get install -y live-build debootstrap curl dos2unix sudo
         
         # Ensure scripts have Linux line endings and are executable
         find . -name "*.sh" -exec dos2unix {} +
@@ -43,7 +37,7 @@ jobs:
     - name: Build ISO
       run: |
         export DEBIAN_FRONTEND=noninteractive
-        sudo ./build_nexos.sh
+        ./build_nexos.sh
 
     - name: Upload ISO Artifact
       uses: actions/upload-artifact@v4
