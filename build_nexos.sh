@@ -41,7 +41,7 @@ lb config \
     --source false \
     --security false \
     --compression xz \
-    --xz-options "-e -9"
+    --squashfs-options "-comp xz -e -9"
 
 # 3. Trigger build
 log "Starting the build process. This may take 20-45 minutes..."
