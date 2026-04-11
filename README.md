@@ -1,70 +1,75 @@
-# 🚀 NexOS - Distribución Debian Personalizada
+<p align="center">
+  <img src="docs/img/banner.png" alt="NexOS Banner" width="100%">
+</p>
 
-[![Build NexOS ISO](https://github.com/jpscalero/NexOS/actions/workflows/build_nexos.yml/badge.svg)](https://github.com/jpscalero/NexOS/actions/workflows/build_nexos.yml)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Debian Version](https://img.shields.io/badge/Debian-13__Trixie-red.svg)](https://www.debian.org/releases/trixie/)
+# <p align="center">🚀 NexOS</p>
 
-NexOS es una distribución personalizada basada en **Debian 13 (Trixie)** diseñada para seguridad, administración de servidores y aprendizaje experimental. Incluye el entorno de escritorio **KDE Plasma**, servicios de servidor pre-configurados y una suite completa de herramientas de **Pentesting**.
+<p align="center">
+  <strong>La distribución Debian 13 (Trixie) definitiva para Pentesting, Servidores y Aprendizaje Experimental.</strong>
+</p>
 
----
-
-## 📖 Documentación Detallada (Wiki)
-Para guías completas, manuales de usuario y listas de herramientas, visita nuestra **[Wiki Oficial](https://github.com/jpscalero/NexOS/wiki)**.
-
----
-
-## 🛠️ Cómo Compilar NexOS
-
-### 1. Compilación en la Nube (Recomendado)
-Puedes generar la ISO directamente en GitHub sin instalar nada en tu PC:
-
-1. **Sube los archivos** a tu propio repositorio de GitHub.
-2. **Compilación Estándar**: Cada vez que hagas un `push` a la rama `main`, se generará una ISO temporal (disponible por 7 días en la pestaña **Actions**).
-3. **Versión Permanente (Release)**: Crea una etiqueta (Tag) para guardar una versión para siempre:
-   ```bash
-   git tag v1.0
-   git push origin v1.0
-   ```
-   Esto creará automáticamente una **GitHub Release** con la ISO adjunta de forma permanente.
-
-### 2. Compilación Local (Debian/Ubuntu)
-Si prefieres compilar en tu propia máquina, asegúrate de tener al menos 20GB de espacio libre.
-
-1. **Instalar dependencias y dar permisos**:
-   ```bash
-   chmod +x build_nexos.sh verify_integrity.sh config/hooks/live/*.chroot
-   ```
-2. **Generar ISO**:
-   ```bash
-   sudo ./build_nexos.sh
-   ```
+<p align="center">
+  <a href="https://github.com/jpscalero/NexOS/actions/workflows/build_nexos.yml"><img src="https://github.com/jpscalero/NexOS/actions/workflows/build_nexos.yml/badge.svg" alt="Build Status"></a>
+  <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPL v3"></a>
+  <a href="https://github.com/jpscalero/NexOS/releases"><img src="https://img.shields.io/github/v/release/jpscalero/NexOS" alt="Release"></a>
+  <a href="https://www.debian.org/releases/trixie/"><img src="https://img.shields.io/badge/Debian-13--Trixie-red.svg" alt="Debian Version"></a>
+</p>
 
 ---
 
-## ✨ Características Principales
-- **Escritorio**: KDE Plasma (Personalizado y ligero).
-- **Seguridad**: Nmap, Metasploit, Wireshark, John the Ripper, Sqlmap, etc.
-- **Servidores**: SSH, Nginx, MariaDB (Pre-instalados y listos para activar).
-- **Base**: Debian 13 "Trixie" (Testing) para tener software moderno.
+## 🌟 ¿Por qué NexOS?
 
-## 🔑 Credenciales por Defecto
-- **Usuario**: `nexos`
-- **Contraseña**: `nexos`
-- **Contraseña de Root**: `nexos`
-- **Hostname**: `nexos`
+NexOS nace de la necesidad de tener un entorno de trabajo que sea tan potente para el **pentesting** como estable para la **administración de servidores**. Construido sobre la base sólida de **Debian Trixie**, ofrece una experiencia de usuario moderna con **KDE Plasma** y una suite de herramientas industriales pre-configuradas.
 
 ---
 
-## 🧪 Probar la ISO con QEMU
-Si ya tienes la ISO y quieres probarla rápidamente sin instalar:
-```bash
-qemu-system-x86_64 -enable-kvm -m 2G -cdrom nexos-v1-amd64.iso
-```
+## ✨ Características Destacadas
+
+| 🛡️ Seguridad | 🌐 Servidores | 💻 Escritorio | 🤖 Automatización |
+| :--- | :--- | :--- | :--- |
+| **Metasploit**, **Nmap**, **Wireshark** y más. | **Nginx**, **MariaDB** y **SSH** listos para usar. | **KDE Plasma** ultra-personalizado y fluido. | Compilación 100% automática en **GitHub Actions**. |
 
 ---
 
-## 🤝 Contribuir
-¿Quieres añadir herramientas o mejoras? Revisa nuestra **[Guía de Contribución](CONTRIBUTING.md)**.
+## 📂 Documentación y Guías
+Para una experiencia completa, consulta nuestra documentación oficial en la Wiki:
+👉 **[Wiki de NexOS](https://github.com/jpscalero/NexOS/wiki)**
 
-## ⚖️ Licencia
-Este proyecto está bajo la licencia **GPLv3**. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+---
+
+## 🛠️ Inicio Rápido
+
+### 1. Obtener la ISO
+- **GitHub Release (Recomendado)**: Descarga la última versión estable desde la sección de **[Releases](https://github.com/jpscalero/NexOS/releases)**.
+- **Compilación Manual**: Crea tu propia versión permanente simplemente creando un `Tag` en Git.
+
+### 2. Credenciales por Defecto
+| Usuario | Contraseña | Hostname |
+| :--- | :--- | :--- |
+| `nexos` | `nexos` | `nexos` |
+
+---
+
+## 🚀 Hoja de Ruta (Roadmap)
+Estamos trabajando constantemente para mejorar. Algunos de nuestros próximos hitos incluyen:
+- [ ] Soporte para arquitectura ARM (Raspberry Pi).
+- [ ] Integración de un instalador gráfico avanzado.
+- [ ] Suite de análisis de malware aislada.
+Ver más en **[ROADMAP.md](ROADMAP.md)**.
+
+---
+
+## 🤝 Comunidad y Gobernanza
+NexOS es un proyecto abierto y profesional. Valoramos la colaboración y la seguridad:
+- 🐞 **¿Encontraste un error?** Abre un [Bug Report](https://github.com/jpscalero/NexOS/issues/new?template=bug_report.md).
+- 💡 **¿Tienes una idea?** Envía una [Feature Request](https://github.com/jpscalero/NexOS/issues/new?template=feature_request.md).
+- 🛡️ **Seguridad**: Lee nuestra [Política de Seguridad](SECURITY.md).
+- 📜 **Conducta**: Revisa nuestro [Código de Conducta](CODE_OF_CONDUCT.md).
+
+---
+
+<p align="center">
+  Hecho con ❤️ por la comunidad de NexOS.
+  <br>
+  <img src="docs/img/logo.png" alt="NexOS Logo" width="100">
+</p>
