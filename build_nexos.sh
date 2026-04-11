@@ -41,7 +41,8 @@ lb config \
     --source false \
     --security false \
     --compression xz \
-    --squashfs-options "-comp xz -e -9"
+    --chroot-squashfs-compression-type xz \
+    --chroot-squashfs-compression-options "-b 1M -Xbcj x86 -e"
 
 # 3. Trigger build
 log "Starting the build process. This may take 20-45 minutes..."
