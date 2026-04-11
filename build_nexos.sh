@@ -32,14 +32,15 @@ lb clean --all
 
 # Configuration for Debian 13 (Trixie)
 lb config \
+    --mode debian \
+    --system live \
     --distribution trixie \
+    --parent-distribution trixie \
     --archive-areas "main contrib non-free non-free-firmware" \
     --mirror-bootstrap "http://deb.debian.org/debian/" \
     --mirror-binary "http://deb.debian.org/debian/" \
-    --mirror-binary-security "http://security.debian.org/debian-security" \
     --parent-mirror-bootstrap "http://deb.debian.org/debian/" \
     --parent-mirror-binary "http://deb.debian.org/debian/" \
-    --parent-mirror-binary-security "http://security.debian.org/debian-security" \
     --linux-packages "linux-image-amd64" \
     --bootloader "grub-efi" \
     --apt-recommends false \
