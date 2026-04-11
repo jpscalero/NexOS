@@ -1,52 +1,70 @@
-# NexOS - Custom Debian Distribution
+# 🚀 NexOS - Distribución Debian Personalizada
 
-NexOS is a custom Debian 13 (Trixie) distribution featuring KDE Plasma, server services, and a pre-configured suite of pentesting tools.
+[![Build NexOS ISO](https://github.com/jpscalero/NexOS/actions/workflows/build_nexos.yml/badge.svg)](https://github.com/jpscalero/NexOS/actions/workflows/build_nexos.yml)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Debian Version](https://img.shields.io/badge/Debian-13__Trixie-red.svg)](https://www.debian.org/releases/trixie/)
 
-## 🚀 Two Ways to Build NexOS
+NexOS es una distribución personalizada basada en **Debian 13 (Trixie)** diseñada para seguridad, administración de servidores y aprendizaje experimental. Incluye el entorno de escritorio **KDE Plasma**, servicios de servidor pre-configurados y una suite completa de herramientas de **Pentesting**.
 
-### 1. Build Automatically on GitHub (Recommended)
-You can compile the ISO directly on GitHub:
+---
 
-1. **Push to GitHub**: Upload this folder to your repository.
-2. **Standard Build**: Every time you push to `main`, an ISO is generated as a temporary artifact (stored for 7 days).
-3. **Permanent Version**: To create a permanent version, create a **Tag** (e.g., `v1.0`).
+## 📖 Documentación Detallada (Wiki)
+Para guías completas, manuales de usuario y listas de herramientas, visita nuestra **[Wiki Oficial](https://github.com/jpscalero/NexOS/wiki)**.
+
+---
+
+## 🛠️ Cómo Compilar NexOS
+
+### 1. Compilación en la Nube (Recomendado)
+Puedes generar la ISO directamente en GitHub sin instalar nada en tu PC:
+
+1. **Sube los archivos** a tu propio repositorio de GitHub.
+2. **Compilación Estándar**: Cada vez que hagas un `push` a la rama `main`, se generará una ISO temporal (disponible por 7 días en la pestaña **Actions**).
+3. **Versión Permanente (Release)**: Crea una etiqueta (Tag) para guardar una versión para siempre:
    ```bash
    git tag v1.0
    git push origin v1.0
    ```
-   This will automatically create a **GitHub Release** with the ISO attached permanently.
+   Esto creará automáticamente una **GitHub Release** con la ISO adjunta de forma permanente.
 
-### 2. Build Locally (Debian/Ubuntu)
-If you prefer building locally, ensure you have at least 20GB of free space.
+### 2. Compilación Local (Debian/Ubuntu)
+Si prefieres compilar en tu propia máquina, asegúrate de tener al menos 20GB de espacio libre.
 
-1. **Permissions**:
+1. **Instalar dependencias y dar permisos**:
    ```bash
    chmod +x build_nexos.sh verify_integrity.sh config/hooks/live/*.chroot
    ```
-2. **Verify Integrity**:
-   ```bash
-   ./verify_integrity.sh
-   ```
-3. **Generate ISO**:
+2. **Generar ISO**:
    ```bash
    sudo ./build_nexos.sh
    ```
 
-## 🛠 Features
-- **Desktop**: KDE Plasma (Customized)
-- **Security**: Nmap, Metasploit, Wireshark, John the Ripper, Sqlmap, etc.
-- **Services**: SSH, Nginx, MariaDB (Pre-configured).
-- **Base**: Debian 13 "Trixie" (Testing).
+---
 
-## 🔑 Default Credentials
-- **User**: `nexos`
-- **Password**: `nexos`
-- **Root Password**: `nexos`
+## ✨ Características Principales
+- **Escritorio**: KDE Plasma (Personalizado y ligero).
+- **Seguridad**: Nmap, Metasploit, Wireshark, John the Ripper, Sqlmap, etc.
+- **Servidores**: SSH, Nginx, MariaDB (Pre-instalados y listos para activar).
+- **Base**: Debian 13 "Trixie" (Testing) para tener software moderno.
+
+## 🔑 Credenciales por Defecto
+- **Usuario**: `nexos`
+- **Contraseña**: `nexos`
+- **Contraseña de Root**: `nexos`
 - **Hostname**: `nexos`
 
-## 🧪 Testing the ISO
-Use QEMU for a quick test:
+---
+
+## 🧪 Probar la ISO con QEMU
+Si ya tienes la ISO y quieres probarla rápidamente sin instalar:
 ```bash
-sudo apt install qemu-system-x86
 qemu-system-x86_64 -enable-kvm -m 2G -cdrom nexos-v1-amd64.iso
 ```
+
+---
+
+## 🤝 Contribuir
+¿Quieres añadir herramientas o mejoras? Revisa nuestra **[Guía de Contribución](CONTRIBUTING.md)**.
+
+## ⚖️ Licencia
+Este proyecto está bajo la licencia **GPLv3**. Consulta el archivo [LICENSE](LICENSE) para más detalles.
