@@ -36,7 +36,6 @@ lb config \
     --archive-areas "main contrib non-free non-free-firmware" \
     --mirror-bootstrap "http://deb.debian.org/debian/" \
     --mirror-binary "http://deb.debian.org/debian/" \
-    --mirror-bootstrap-security "http://security.debian.org/debian-security" \
     --mirror-binary-security "http://security.debian.org/debian-security" \
     --parent-mirror-bootstrap "http://deb.debian.org/debian/" \
     --parent-mirror-binary "http://deb.debian.org/debian/" \
