@@ -36,7 +36,7 @@ lb config \
     --archive-areas "main contrib non-free non-free-firmware" \
     --linux-packages "linux-image" \
     --binary-images iso-hybrid \
-    --bootloaders "isolinux,grub-efi" \
+    --bootloaders "syslinux,grub-efi" \
     --apt-recommends false \
     --memtest none \
     --source false \
