@@ -28,9 +28,25 @@ if [ -d "$THEME_DIR" ]; then
 fi
 
 # 2. KDE Global Defaults
-# We can use /etc/xdg/ to set defaults for all new users
-mkdir -p /etc/skel/.config
-# This is a bit complex for a single script, but we ensure the wallpaper dir exists
+echo "Applying NexOS Premium UI defaults..."
+
+# Ensure the wallpaper is in the right place
 mkdir -p /usr/share/wallpapers/nexos/
 
-echo "KDE customization complete."
+# 3. SDDM Professional Look
+THEME_DIR="/usr/share/sddm/themes/debian-plasma"
+if [ -d "$THEME_DIR" ]; then
+    echo "Customizing SDDM background..."
+    # Point SDDM to the NexOS wallpaper
+    ln -sf /usr/share/wallpapers/nexos/wallpaper.png "$THEME_DIR/contents/background.png" 2>/dev/null || true
+fi
+
+# 4. User skeletal sync
+if [ -d "/home/nexos" ]; then
+    echo "Syncing NexOS user profile..."
+    cp -rv /etc/skel/.config /home/nexos/ || true
+    cp -rv /etc/skel/.local /home/nexos/ || true
+    chown -R nexos:nexos /home/nexos/
+fi
+
+echo "KDE NexOS Premium customization complete."

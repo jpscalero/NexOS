@@ -1,0 +1,9 @@
+[KDE]
+LookAndFeelPackage=org.kde.breezedark.desktop
+
+[General]
+ColorScheme=BreezeDark
+font=Cantarell,10,-1,5,50,0,0,0,0,0
+
+[Icons]
+Theme=breeze-dark
