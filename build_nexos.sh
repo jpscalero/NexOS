@@ -34,7 +34,7 @@ lb clean --all
 lb config \
     --distribution trixie \
     --archive-areas "main contrib non-free non-free-firmware" \
-    --linux-packages "linux-image-amd64" \
+    --linux-packages "linux-image" \
     --bootloader "grub-efi" \
     --apt-recommends false \
     --debian-installer live \
