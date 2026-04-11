@@ -37,10 +37,10 @@ lb config \
     --distribution trixie \
     --parent-distribution trixie \
     --archive-areas "main contrib non-free non-free-firmware" \
-    --mirror-bootstrap "http://deb.debian.org/debian/" \
-    --mirror-binary "http://deb.debian.org/debian/" \
-    --parent-mirror-bootstrap "http://deb.debian.org/debian/" \
-    --parent-mirror-binary "http://deb.debian.org/debian/" \
+    --mirror-bootstrap "http://deb.debian.org/debian" \
+    --mirror-binary "http://deb.debian.org/debian" \
+    --parent-mirror-bootstrap "http://deb.debian.org/debian" \
+    --parent-mirror-binary "http://deb.debian.org/debian" \
     --security false \
     --linux-packages "linux-image-amd64" \
     --bootloader "grub-efi" \
