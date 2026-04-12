@@ -41,7 +41,11 @@ lb config \
     --memtest none \
     --source false \
     --security false \
-    --compression xz
+    --compression xz \
+    --iso-volume "NexOS" \
+    --iso-publisher "NexOS Project" \
+    --iso-application "NexOS Live" \
+    --bootappend-live "boot=live components hostname=nexos username=nexos quiet splash"
 
 # 3. Trigger build
 log "Starting the build process. This may take 20-45 minutes..."

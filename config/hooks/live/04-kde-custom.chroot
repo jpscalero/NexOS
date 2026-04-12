@@ -10,7 +10,7 @@ echo "Customizing KDE and SDDM..."
 mkdir -p /etc/sddm.conf.d/
 cat <<EOF > /etc/sddm.conf.d/nexos.conf
 [Theme]
-Current=debian-plasma
+Current=nexos-plasma
 CursorTheme=breeze_cursors
 
 [General]
@@ -33,12 +33,27 @@ echo "Applying NexOS Premium UI defaults..."
 # Ensure the wallpaper is in the right place
 mkdir -p /usr/share/wallpapers/nexos/
 
-# 3. SDDM Professional Look
-THEME_DIR="/usr/share/sddm/themes/debian-plasma"
-if [ -d "$THEME_DIR" ]; then
-    echo "Customizing SDDM background..."
-    # Point SDDM to the NexOS wallpaper
-    ln -sf /usr/share/wallpapers/nexos/wallpaper.png "$THEME_DIR/contents/background.png" 2>/dev/null || true
+# 3. NexOS Branded Theme for SDDM
+ORIG_THEME="/usr/share/sddm/themes/debian-plasma"
+NEW_THEME="/usr/share/sddm/themes/nexos-plasma"
+
+if [ -d "$ORIG_THEME" ]; then
+    echo "Creating NexOS SDDM theme..."
+    cp -r "$ORIG_THEME" "$NEW_THEME"
+    
+    # Customize metadata
+    sed -i 's/Debian/NexOS/g' "$NEW_THEME/metadata.desktop"
+    sed -i 's/debian/nexos/g' "$NEW_THEME/metadata.desktop"
+    
+    # Customize background
+    if [ -f "/usr/share/wallpapers/nexos/wallpaper.png" ]; then
+        ln -sf /usr/share/wallpapers/nexos/wallpaper.png "$NEW_THEME/contents/background.png"
+    fi
+    
+    # Customize logo
+    if [ -f "/usr/share/pixmaps/nexos-logo.png" ]; then
+        ln -sf /usr/share/pixmaps/nexos-logo.png "$NEW_THEME/contents/logo.png"
+    fi
 fi
 
 # 4. User skeletal sync
