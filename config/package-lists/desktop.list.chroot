@@ -10,6 +10,7 @@ network-manager-gnome
 xorg
 breeze-gtk-theme
 kde-config-gtk-style
+papirus-icon-theme
 firmware-linux
 firmware-linux-nonfree
 firmware-realtek

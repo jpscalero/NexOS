@@ -32,6 +32,25 @@ EOF
 echo "NexOS \n \l" > /etc/issue
 echo "NexOS %h" > /etc/issue.net
 
+# 4. Professional /etc/motd
+cat <<EOF > /etc/motd
+  _   _             ____  ____  
+ | \ | | _____  __/ __ \/ ___| 
+ |  \| |/ _ \ \/ / |  | \___ \ 
+ | |\  |  __/>  <| |__| |___) |
+ |_| \_|\___/_/\_\\____/|____/ 
+
+ Welcome to NexOS Vanguard Edition
+ Based on Debian 13 (Trixie) - Full Pentesting Suite
+
+ * Project: https://github.com/jpscalero/NexOS
+ * Support: https://github.com/jpscalero/NexOS/issues
+
+ This system is for authorized testing and educational purposes.
+ Be safe. Be ethical.
+
+EOF
+
 # 4. Branding for Hostname (fallback)
 echo "nexos" > /etc/hostname
 
