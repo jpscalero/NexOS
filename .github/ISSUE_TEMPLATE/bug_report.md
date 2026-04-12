@@ -1,6 +1,6 @@
 ---
-name: "Reporte de Error \U0001F41B"
-about: Reporta algo que no funciona en NexOS para que podamos arreglarlo.
+name: 🐛 Reporte de Error (Bug Report)
+about: Crea un reporte para ayudarnos a mejorar NexOS.
 title: "[BUG] "
 labels: bug
 assignees: ''
@@ -8,23 +8,23 @@ assignees: ''
 ---
 
 **Descripción del Error**
-Una descripción clara y concisa de lo que está pasando.
+Una descripción clara y concisa de lo que sucede.
 
 **Pasos para Reproducir**
-1. Ve a '...'
-2. Haz clic en '....'
-3. Mira el error '....'
+1. Ejecutar el script `...`
+2. Configurar la opción `...`
+3. Ver el error en el log...
 
 **Comportamiento Esperado**
-Una descripción clara de lo que esperabas que sucediera.
+¿Qué debería haber pasado?
 
-**Capturas de Pantalla**
-Si es posible, añade capturas de pantalla para ayudar a explicar el problema.
+**Capturas de Pantalla / Logs**
+Si es posible, adjunta capturas de pantalla o el log de salida de `live-build`.
 
-**Entorno de Pruebas:**
-- Versión de NexOS: [ej. v2.9]
-- Método de ejecución: [ej. QEMU, VirtualBox, Hardware Real]
-- Especificaciones del PC: [ej. 8GB RAM, i5]
+**Información del Entorno**
+- OS Host (donde compilas): (ej. Windows 11 WSL2)
+- Rama del Repo: (ej. main)
+- Versión de live-build: (ej. 20240101)
 
-**Información Adicional**
-Cualquier otro detalle sobre el problema.
+**Contexto Adicional**
+Cualquier otra información que pueda ser útil.

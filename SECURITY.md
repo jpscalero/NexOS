@@ -6,8 +6,8 @@ Actualmente, solo proporcionamos parches de seguridad para la última versión l
 
 | Versión | Soportada |
 | ------- | --------- |
-| v2.9.x  | ✅ Soportada |
-| < v2.9  | ❌ No Soportada |
+| v1.x    | ✅ Soportada |
+| < v1.0  | ❌ No Soportada |
 
 ## Reportar una Vulnerabilidad
 

@@ -7,19 +7,20 @@ NexOS aspira a ser la distribución de referencia para entornos educativos y pro
 
 ---
 
-## 🚀 Hitos de Próxima Implementación (Corto Plazo)
-- [ ] **Soporte ARM (Raspberry Pi 4/5)**: Crear una versión del sistema optimizada para dispositivos embebidos.
-- [ ] **Instalador Gráfico Calamares**: Facilitar la instalación física del sistema mediante un instalador intuitivo en lugar del manual.
-- [ ] **Wiki Multimedia**: Añadir videos tutoriales y demostraciones de herramientas directamente en la Wiki.
+## 🚀 Hitos de Próxima Implementación (Corto Plazo - v1.1)
+- [ ] **Soporte ARM (Raspberry Pi 4/5)**: Portar los scripts de construcción para generar imágenes compatibles con ARM64.
+- [ ] **Instalador Gráfico Calamares**: Integrar un instalador intuitivo para facilitar el despliegue en hardware real.
+- [ ] **Optimización de Imagen**: Reducir el tamaño de la ISO eliminando paquetes redundantes sin perder funcionalidad.
 
-## 🛠️ Mejoras Técnicas (Medio Plazo)
-- [ ] **Repositorio de Paquetes Propio**: Crear un repositorio `.deb` para actualizaciones rápidas de herramientas personalizadas.
-- [ ] **Modo Forense**: Añadir una opción de arranque que no monte discos internos (Write-blocking) para tareas de informática forense.
-- [ ] **Integración con la Nube**: Scripts para desplegar NexOS como una instancia de servidor segura en AWS/Azure.
+## 🛠️ Mejoras Técnicas (Medio Plazo - v1.5)
+- [ ] **Repositorio NexOS**: Crear un repositorio `.deb` propio para distribuir actualizaciones de herramientas personalizadas.
+- [ ] **Modo Forense (Write-blocking)**: Añadir una opción de arranque que no monte discos internos automáticamente para tareas de informática forense.
+- [ ] **Wiki Interactiva**: Documentación técnica multimedia integrada en la imagen del sistema.
 
-## 🌌 Visión a Largo Plazo
-- [ ] **Ecosistema NexOS**: Desarrollo de herramientas propias de seguridad exclusivas para la distribución.
-- [ ] **Certificación Educativa**: Crear un programa de certificación basado en el uso y dominio de NexOS.
+## 🌌 Visión a Largo Plazo (v2.0 "Nexus")
+- [ ] **Nexus Tools**: Desarrollo de herramientas de orquestación de ataques propias exclusivas para NexOS.
+- [ ] **NexOS Cloud**: Scripts de despliegue automatizado en entornos de nube (AWS, Azure, GCP).
+- [ ] **Certificación Profesional**: Crear un ecosistema de capacitación basado en el uso de la distribución.
 
 ---
 
