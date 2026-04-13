@@ -3,10 +3,8 @@ LookAndFeelPackage=org.kde.breezedark.desktop
 
 [General]
 ColorScheme=BreezeDark
+Name=NexOS Premium Dark
 font=Cantarell,10,-1,5,50,0,0,0,0,0
 
 [Icons]
 Theme=Papirus-Dark
-
-[ScreenLocker]
-Wallpaper=file:///usr/share/wallpapers/nexos/wallpaper.png

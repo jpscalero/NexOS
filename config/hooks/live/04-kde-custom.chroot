@@ -1,10 +1,10 @@
 #!/bin/bash
-# KDE and SDDM Customization
+# KDE and SDDM Customization for NexOS
 set -e
 
 WALLPAPER_PATH="/usr/share/wallpapers/nexos/wallpaper.png"
 
-echo "Customizing KDE and SDDM..."
+echo "Customizing KDE and SDDM for NexOS..."
 
 # 1. SDDM Configuration
 mkdir -p /etc/sddm.conf.d/
@@ -17,28 +17,13 @@ CursorTheme=breeze_cursors
 InputMethod=
 EOF
 
-# Note: Setting the SDDM wallpaper usually requires editing the theme's metadata or a config.
-# For the default Debian Plasma theme:
-THEME_DIR="/usr/share/sddm/themes/debian-plasma"
-if [ -d "$THEME_DIR" ]; then
-    # Backup original
-    cp "$THEME_DIR/metadata.desktop" "$THEME_DIR/metadata.desktop.bak"
-    # (Simplified) We can link our wallpaper to the one expected by the theme if known,
-    # or just keep it simple.
-fi
-
-# 2. KDE Global Defaults
-echo "Applying NexOS Premium UI defaults..."
-
-# Ensure the wallpaper is in the right place
-mkdir -p /usr/share/wallpapers/nexos/
-
-# 3. NexOS Branded Theme for SDDM
+# 2. NexOS Branded Theme for SDDM
 ORIG_THEME="/usr/share/sddm/themes/debian-plasma"
 NEW_THEME="/usr/share/sddm/themes/nexos-plasma"
 
 if [ -d "$ORIG_THEME" ]; then
     echo "Creating NexOS SDDM theme..."
+    rm -rf "$NEW_THEME"
     cp -r "$ORIG_THEME" "$NEW_THEME"
     
     # Customize metadata
@@ -46,8 +31,8 @@ if [ -d "$ORIG_THEME" ]; then
     sed -i 's/debian/nexos/g' "$NEW_THEME/metadata.desktop"
     
     # Customize background
-    if [ -f "/usr/share/wallpapers/nexos/wallpaper.png" ]; then
-        ln -sf /usr/share/wallpapers/nexos/wallpaper.png "$NEW_THEME/contents/background.png"
+    if [ -f "$WALLPAPER_PATH" ]; then
+        cp "$WALLPAPER_PATH" "$NEW_THEME/contents/background.png"
     fi
     
     # Customize logo
@@ -56,12 +41,21 @@ if [ -d "$ORIG_THEME" ]; then
     fi
 fi
 
-# 4. User skeletal sync
+# 3. Force Global Defaults
+echo "Forcing system-wide NexOS Premium UI defaults..."
+mkdir -p /etc/xdg
+# (Already created in config/includes.chroot but ensure permissions)
+chmod 644 /etc/xdg/kdeglobals || true
+chmod 644 /etc/xdg/plasmarc || true
+
+# 4. User skeletal sync optimization
+# This ensures that even if live-config creates the user later, the skeleton is ready.
 if [ -d "/home/nexos" ]; then
-    echo "Syncing NexOS user profile..."
+    echo "Pre-syncing NexOS user profile..."
     cp -rv /etc/skel/.config /home/nexos/ || true
     cp -rv /etc/skel/.local /home/nexos/ || true
     chown -R nexos:nexos /home/nexos/
 fi
 
 echo "KDE NexOS Premium customization complete."
+

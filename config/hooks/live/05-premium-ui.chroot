@@ -1,0 +1,69 @@
+#!/bin/bash
+# NexOS Premium UI Tweaks
+set -e
+
+echo "Applying NexOS Premium UI Tweaks..."
+
+# 1. Disable KDE First Run Wizard
+# This prevents KDE from overwriting our custom /etc/skel or /etc/xdg settings
+mkdir -p /etc/xdg/
+cat <<EOF > /etc/xdg/kcmfonts
+[General]
+forceFontDPI=0
+EOF
+
+cat <<EOF > /etc/xdg/knotifyrc
+[Notifications]
+PopupDuration=5
+EOF
+
+# Disable the "New Features" and "First Run" popups
+mkdir -p /etc/xdg/autostart
+if [ -f /etc/xdg/autostart/org.kde.plasma-welcome.desktop ]; then
+    echo "NoDisplay=true" >> /etc/xdg/autostart/org.kde.plasma-welcome.desktop
+fi
+
+# 2. Set default GTK theme to match Breeze Dark
+mkdir -p /etc/gtk-3.0
+cat <<EOF > /etc/gtk-3.0/settings.ini
+[Settings]
+gtk-theme-name=Breeze-Dark
+gtk-icon-theme-name=Papirus-Dark
+gtk-font-name=Cantarell 10
+gtk-application-prefer-dark-theme=1
+EOF
+
+# 3. Fastfetch Branding
+# Create a default fastfetch config for the user
+mkdir -p /etc/skel/.config/fastfetch
+cat <<EOF > /etc/skel/.config/fastfetch/config.jsonc
+{
+    "\$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "modules": [
+        "title",
+        "separator",
+        "os",
+        "host",
+        "kernel",
+        "uptime",
+        "packages",
+        "shell",
+        "display",
+        "de",
+        "wm",
+        "terminal",
+        "cpu",
+        "gpu",
+        "memory",
+        "break",
+        "colors"
+    ]
+}
+EOF
+
+# 4. Final Permissions Check
+chown -R root:root /etc/xdg
+chmod -R 644 /etc/xdg/* || true
+find /etc/xdg -type d -exec chmod 755 {} \;
+
+echo "NexOS Premium UI Tweaks applied."

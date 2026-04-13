@@ -42,7 +42,7 @@ done
 # 3. Build Hooks
 echo ""
 echo "--- Build Hooks ---"
-for hook in 00-system-branding 01-metasploit 02-user-setup 03-service-config 04-kde-custom 99-cleanup; do
+for hook in 00-system-branding 01-metasploit 02-user-setup 03-service-config 04-kde-custom 05-premium-ui 99-cleanup; do
     check_file "config/hooks/live/${hook}.chroot"
 done
 
@@ -63,6 +63,8 @@ echo "--- System Configuration ---"
 check_file "config/includes.chroot/etc/hostname"
 check_file "config/includes.chroot/etc/hosts"
 check_file "config/includes.chroot/etc/ssh/nexos-banner"
+check_file "config/includes.chroot/etc/xdg/kdeglobals"
+check_file "config/includes.chroot/etc/xdg/plasmarc"
 
 # 6. User Environment (Skeleton)
 echo ""
