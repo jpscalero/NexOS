@@ -1,5 +1,5 @@
 [KDE]
-LookAndFeelPackage=org.kde.breezedark.desktop
+LookAndFeelPackage=org.kde.nexos.desktop
 
 [General]
 ColorScheme=BreezeDark

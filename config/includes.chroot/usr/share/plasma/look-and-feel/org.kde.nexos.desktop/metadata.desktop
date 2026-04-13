@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=NexOS
+Comment=Official NexOS Premium Dark Theme
+Icon=nexos-logo
+Type=Service
+
+X-KDE-PluginInfo-Author=Antigravity
+X-KDE-PluginInfo-Email=nexos@example.com
+X-KDE-PluginInfo-Name=org.kde.nexos.desktop
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-Website=https://github.com/jpscalero/NexOS
+X-KDE-PluginInfo-KPackage-Parent=org.kde.breezedark.desktop
+X-KDE-PluginInfo-License=GPL-3.0
+X-KDE-ServiceTypes=Plasma/LookAndFeel
+X-Plasma-MainScript=defaults

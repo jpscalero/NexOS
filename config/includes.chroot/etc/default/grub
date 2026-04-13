@@ -1,0 +1,15 @@
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="NexOS"
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+GRUB_CMDLINE_LINUX=""
+
+# NexOS Branding
+GRUB_BACKGROUND="/usr/share/wallpapers/nexos/wallpaper.png"
+GRUB_TERMINAL_OUTPUT="gfxterm"
+GRUB_GFXMODE="auto"
+GRUB_DISABLE_OS_PROBER=false
+
+# Colors for menu
+export GRUB_COLOR_NORMAL="white/black"
+export GRUB_COLOR_HIGHLIGHT="black/light-gray"

@@ -8,7 +8,7 @@ echo "Applying NexOS System Branding..."
 
 # 1. Update /etc/os-release
 cat <<EOF > /etc/os-release
-PRETTY_NAME="NexOS v1 (Trixie/Debian 13)"
+PRETTY_NAME="NexOS v1 (Vanguard)"
 NAME="NexOS"
 VERSION_ID="1"
 VERSION="1 (vanguard)"
@@ -24,7 +24,7 @@ EOF
 cat <<EOF > /etc/lsb-release
 DISTRIB_ID=NexOS
 DISTRIB_RELEASE=1
-DISTRIB_CODENAME=trixie
+DISTRIB_CODENAME=vanguard
 DISTRIB_DESCRIPTION="NexOS Vanguard Edition"
 EOF
 
