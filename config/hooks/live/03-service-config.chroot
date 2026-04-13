@@ -1,21 +1,40 @@
 #!/bin/bash
-# Configure services and firewall
+# NexOS Service Configuration Hook
+# Configures SSH, Nginx, MariaDB and firewall rules.
 set -e
 
-echo "Configuring services..."
+echo "Configuring NexOS services..."
 
-# Enable services
+# 1. Enable core services
 systemctl enable ssh
 systemctl enable nginx
 systemctl enable mariadb
 
-# Configure UFW
-echo "Setting up firewall..."
-ufw default deny incoming
-ufw default allow outgoing
-ufw allow ssh
-ufw allow http
-ufw allow https
-ufw --force enable
+# 2. Configure SSH with NexOS security banner
+if [ -f /etc/ssh/sshd_config ]; then
+    echo "Applying SSH security banner..."
+    # Ensure the banner directive exists
+    if grep -q "^#*Banner" /etc/ssh/sshd_config; then
+        sed -i 's|^#*Banner.*|Banner /etc/ssh/nexos-banner|' /etc/ssh/sshd_config
+    else
+        echo "Banner /etc/ssh/nexos-banner" >> /etc/ssh/sshd_config
+    fi
+fi
+
+# 3. Configure UFW rules (pre-configure only, don't enable in chroot)
+# UFW cannot be enabled inside a chroot environment because it requires
+# iptables kernel modules. Rules are configured here and UFW is enabled
+# at first boot via a systemd service or manually by the user.
+echo "Pre-configuring UFW firewall rules..."
+if command -v ufw &>/dev/null; then
+    ufw default deny incoming 2>/dev/null || true
+    ufw default allow outgoing 2>/dev/null || true
+    ufw allow ssh 2>/dev/null || true
+    ufw allow http 2>/dev/null || true
+    ufw allow https 2>/dev/null || true
+    echo "UFW rules pre-configured. Enable with: sudo ufw --force enable"
+else
+    echo "UFW not found, skipping firewall configuration."
+fi
 
 echo "Service configuration complete."

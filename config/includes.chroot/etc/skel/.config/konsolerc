@@ -3,4 +3,4 @@ DefaultProfile=NexOS.profile
 
 [MainWindow]
 MenuBar=Disabled
-ToolBarsSelfee=Disabled
+ToolBarsMovable=Disabled
