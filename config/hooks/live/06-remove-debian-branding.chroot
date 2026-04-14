@@ -19,8 +19,13 @@ rm -rf /usr/share/sddm/themes/maya
 rm -rf /usr/share/sddm/themes/elarun
 
 # 3. Clean up Debian wallpapers
-find /usr/share/wallpapers -name "*debian*" -exec rm -rf {} +
-find /usr/share/images -name "*debian*" -exec rm -rf {} +
+if [ -d /usr/share/wallpapers ]; then
+    find /usr/share/wallpapers -name "*debian*" -exec rm -rf {} +
+fi
+
+if [ -d /usr/share/images ]; then
+    find /usr/share/images -name "*debian*" -exec rm -rf {} +
+fi
 
 # 4. Set NexOS as default Plymouth theme
 if [ -d /usr/share/plymouth/themes/nexos ]; then
