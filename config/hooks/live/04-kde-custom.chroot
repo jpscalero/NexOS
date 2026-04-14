@@ -2,53 +2,27 @@
 # KDE and SDDM Customization for NexOS
 set -e
 
-WALLPAPER_PATH="/usr/share/wallpapers/nexos/wallpaper.png"
-
 echo "Customizing KDE and SDDM for NexOS..."
 
 # 1. SDDM Configuration
 mkdir -p /etc/sddm.conf.d/
 cat <<EOF > /etc/sddm.conf.d/nexos.conf
 [Theme]
-Current=nexos-plasma
+Current=nexos-sddm
 CursorTheme=breeze_cursors
 
 [General]
 InputMethod=
 EOF
 
-# 2. NexOS Branded Theme for SDDM
-ORIG_THEME="/usr/share/sddm/themes/debian-plasma"
-NEW_THEME="/usr/share/sddm/themes/nexos-plasma"
-
-if [ -d "$ORIG_THEME" ]; then
-    echo "Creating NexOS SDDM theme..."
-    rm -rf "$NEW_THEME"
-    cp -r "$ORIG_THEME" "$NEW_THEME"
-    
-    # Customize metadata
-    sed -i 's/Debian/NexOS/g' "$NEW_THEME/metadata.desktop"
-    sed -i 's/debian/nexos/g' "$NEW_THEME/metadata.desktop"
-    
-    # Customize background
-    if [ -f "$WALLPAPER_PATH" ]; then
-        cp "$WALLPAPER_PATH" "$NEW_THEME/contents/background.png"
-    fi
-    
-    # Customize logo
-    if [ -f "/usr/share/pixmaps/nexos-logo.png" ]; then
-        ln -sf /usr/share/pixmaps/nexos-logo.png "$NEW_THEME/contents/logo.png"
-    fi
-fi
-
-# 3. Force Global Defaults
+# 2. Force Global Defaults
 echo "Forcing system-wide NexOS Premium UI defaults..."
 mkdir -p /etc/xdg
 # (Already created in config/includes.chroot but ensure permissions)
 chmod 644 /etc/xdg/kdeglobals || true
 chmod 644 /etc/xdg/plasmarc || true
 
-# 4. User skeletal sync optimization
+# 3. User skeletal sync optimization
 # This ensures that even if live-config creates the user later, the skeleton is ready.
 if [ -d "/home/nexos" ]; then
     echo "Pre-syncing NexOS user profile..."
@@ -58,4 +32,3 @@ if [ -d "/home/nexos" ]; then
 fi
 
 echo "KDE NexOS Premium customization complete."
-

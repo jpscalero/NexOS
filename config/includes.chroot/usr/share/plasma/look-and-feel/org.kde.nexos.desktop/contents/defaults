@@ -1,12 +1,15 @@
-[KDE]
-LookAndFeelPackage=org.kde.nexos.desktop
-
 [General]
 ColorScheme=BreezeDark
-font=Cantarell,10,-1,5,50,0,0,0,0,0
+Name=NexOS Premium Dark
+
+[Wallpaper]
+Image=file:///usr/share/wallpapers/nexos/wallpaper.png
 
 [Icons]
 Theme=Papirus-Dark
+
+[KCMFonts]
+forceFontDPI=0
 
 [ScreenLocker]
 Wallpaper=file:///usr/share/wallpapers/nexos/wallpaper.png

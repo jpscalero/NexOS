@@ -24,7 +24,7 @@ jobs:
     - name: Setup Build Environment
       run: |
         apt-get update
-        apt-get install -y live-build debootstrap curl dos2unix sudo
+        apt-get install -y live-build debootstrap curl dos2unix sudo plymouth plymouth-themes
         
         # Ensure scripts have Linux line endings and are executable
         find . -name "*.sh" -exec dos2unix {} +

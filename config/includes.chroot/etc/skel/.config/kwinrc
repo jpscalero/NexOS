@@ -1,0 +1,7 @@
+[Windows]
+BorderlessMaximizedWindows=false
+
+[Compositing]
+Enabled=true
+Backend=OpenGL
+AnimationSpeed=1

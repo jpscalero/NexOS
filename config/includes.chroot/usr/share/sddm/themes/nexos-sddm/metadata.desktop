@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Theme
+Name=NexOS SDDM
+Description=NexOS Professional Login Theme
+Author=Antigravity
+Copyright=2026 NexOS Project
+Screenshot=screenshot.png
+MainScript=Main.qml
+ConfigFile=theme.conf
+TranslationsDirectory=translations
+Email=nexos@example.com
+Theme-Id=nexos-sddm
+Theme-API=2.0

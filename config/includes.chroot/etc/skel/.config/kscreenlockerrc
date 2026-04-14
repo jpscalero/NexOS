@@ -1,0 +1,6 @@
+[ScreenLocker]
+LockOnResume=true
+Wallpaper=file:///usr/share/wallpapers/nexos/wallpaper.png
+
+[Greeter]
+Theme=org.kde.nexos.desktop

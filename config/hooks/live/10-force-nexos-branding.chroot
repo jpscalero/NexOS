@@ -5,50 +5,27 @@ set -e
 
 echo "Forcing NexOS Total Branding..."
 
-# 1. Overpower desktop-base
-# Debian uses /usr/share/desktop-base/ for many defaults.
-# We will redirect the active theme links to our assets.
-
-ASSETS_DIR="/usr/share/wallpapers/nexos"
-DB_DIR="/usr/share/desktop-base"
-
-mkdir -p "$DB_DIR"
-
-# Force themes to NexOS
-if [ -d "$DB_DIR" ]; then
-    echo "Replacing Debian desktop-base symlinks..."
-    
-    # Common symlinks in Debian that point to current theme
-    for link in active-theme debian-logos login-background; do
-        rm -f "$DB_DIR/$link"
-        ln -sf "$ASSETS_DIR" "$DB_DIR/$link"
-    done
-    
-    # Overwrite the actual wallpaper links used by desktop-base
-    mkdir -p "$DB_DIR/active-theme/wallpaper/contents/images"
-    ln -sf "$ASSETS_DIR/wallpaper.png" "$DB_DIR/active-theme/wallpaper/contents/images/1920x1080.png"
-fi
-
-# 2. Plymouth Branding
+# 1. Plymouth Branding
 echo "Setting NexOS Plymouth theme..."
 if command -v plymouth-set-default-theme >/dev/null; then
-    plymouth-set-default-theme spinner || true
+    plymouth-set-default-theme nexos || true
 fi
 
-# 3. GRUB Rebranding
+# 2. GRUB Rebranding
 echo "Updating GRUB branding..."
 if [ -f /etc/default/grub ]; then
-    # Ensure update-grub is called during build
-    if command -v update-grub >/dev/null; then
-        update-grub || true
-    elif command -v grub-mkconfig >/dev/null; then
-        grub-mkconfig -o /boot/grub/grub.cfg || true
-    fi
+    update-grub || true
 fi
 
-# 4. Remove Debian Version Strings
+# 3. Remove Debian Version Strings
 echo "Unbranding system files..."
 sed -i 's/Debian/NexOS/g' /etc/os-release 2>/dev/null || true
 echo "NexOS/1 (Vanguard)" > /etc/debian_version
+
+# 4. Final Alternative Fix
+if command -v update-alternatives >/dev/null; then
+    # Ensure our wallpaper is the default for desktop-background if it exists
+    update-alternatives --install /usr/share/images/desktop-base/desktop-background desktop-background /usr/share/wallpapers/nexos/wallpaper.png 100 || true
+fi
 
 echo "NexOS Total Branding applied."

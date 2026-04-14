@@ -1,0 +1,32 @@
+#!/bin/bash
+# NexOS Remove Debian Branding Hook
+# This script aggressively removes Debian 13 visual leftovers.
+
+set -e
+
+echo "Redeeming the system from Debian 13 branding..."
+
+# 1. Uninstall desktop-base
+# This package contains most of the Debian wallpapers and theme symlinks.
+if dpkg -l | grep -q desktop-base; then
+    echo "Uninstalling desktop-base..."
+    apt-get remove --purge -y desktop-base
+fi
+
+# 2. Clean up residual Debian themes from SDDM
+rm -rf /usr/share/sddm/themes/debian-plasma
+rm -rf /usr/share/sddm/themes/maya
+rm -rf /usr/share/sddm/themes/elarun
+
+# 3. Clean up Debian wallpapers
+find /usr/share/wallpapers -name "*debian*" -exec rm -rf {} +
+find /usr/share/images -name "*debian*" -exec rm -rf {} +
+
+# 4. Set NexOS as default Plymouth theme
+if [ -d /usr/share/plymouth/themes/nexos ]; then
+    echo "Setting NexOS Plymouth theme..."
+    update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/nexos/nexos.plymouth 100
+    update-alternatives --set default.plymouth /usr/share/plymouth/themes/nexos/nexos.plymouth
+fi
+
+echo "Debian branding removal complete."

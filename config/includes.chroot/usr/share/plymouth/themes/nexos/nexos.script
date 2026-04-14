@@ -1,0 +1,28 @@
+# NexOS Plymouth Script
+# A simple spinner with logo
+
+# Logo handling
+logo_raw = Image("logo.png");
+logo_ratio = logo_raw.GetWidth() / logo_raw.GetHeight();
+logo_height = Window.GetHeight() * 0.15;
+logo_width = logo_height * logo_ratio;
+logo = logo_raw.Scale(logo_width, logo_height);
+
+logo_sprite = Sprite(logo);
+logo_sprite.SetX(Window.GetWidth()  / 2 - logo_width  / 2);
+logo_sprite.SetY(Window.GetHeight() / 2 - logo_height / 2 - 50);
+logo_sprite.SetOpacity(1);
+
+# Loading message
+fun refresh_callback () {
+  # Add animation if needed
+}
+
+Plymouth.SetRefreshFunction (refresh_callback);
+
+# Quit
+fun quit_callback () {
+  logo_sprite.SetOpacity(0);
+}
+
+Plymouth.SetQuitFunction (quit_callback);
