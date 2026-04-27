@@ -1,0 +1,49 @@
+# NexOS Extra Tools (Kali-style)
+# Terminals & Shells
+terminator
+tmux
+zsh
+
+# Editors
+vim
+nano
+
+# File utilities
+tree
+jq
+file
+less
+dos2unix
+
+# Networking & Privacy
+openvpn
+tor
+proxychains4
+
+# Development
+build-essential
+python3
+python3-pip
+python3-venv
+
+# Archive & File Management
+p7zip-full
+unzip
+zip
+rar
+unrar
+
+# Media
+firefox-esr
+ffmpeg
+mpv
+
+# System Monitoring
+btop
+iotop
+lsof
+strace
+
+# Misc
+man-db
+locales

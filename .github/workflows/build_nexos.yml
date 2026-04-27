@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
     tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v2.0
+      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: debian:trixie
-      options: --privileged # Crucial for live-build to mount filesystems
+      options: --privileged
     permissions:
       contents: write
     
@@ -24,12 +24,21 @@ jobs:
     - name: Setup Build Environment
       run: |
         apt-get update
-        apt-get install -y live-build debootstrap curl dos2unix sudo plymouth plymouth-themes
+        apt-get install -y \
+          live-build debootstrap curl dos2unix sudo \
+          plymouth plymouth-themes \
+          isolinux syslinux-common syslinux-efi \
+          xorriso coreutils
         
         # Ensure scripts have Linux line endings and are executable
         find . -name "*.sh" -exec dos2unix {} +
         find . -name "*.chroot" -exec dos2unix {} +
-        chmod +x build_nexos.sh verify_integrity.sh config/hooks/live/*.chroot
+        find . -name "*.conf" -exec dos2unix {} +
+        find ./auto -type f -exec dos2unix {} + 2>/dev/null || true
+        
+        chmod +x build_nexos.sh verify_integrity.sh
+        chmod +x auto/config auto/build auto/clean
+        chmod +x config/hooks/live/*.chroot
 
     - name: Verify Integrity
       run: ./verify_integrity.sh
@@ -43,7 +52,10 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: NexOS-ISO
-        path: nexos-v1-amd64.iso
+        path: |
+          nexos-v1-amd64.iso
+          nexos-v1-amd64.iso.sha256
+          nexos-v1-amd64.iso.md5
         if-no-files-found: error
         retention-days: 7
 
@@ -51,16 +63,30 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/v')
       uses: softprops/action-gh-release@v2
       with:
-        files: nexos-v1-amd64.iso
+        files: |
+          nexos-v1-amd64.iso
+          nexos-v1-amd64.iso.sha256
+          nexos-v1-amd64.iso.md5
         name: NexOS Release ${{ github.ref_name }}
         body: |
+          ## NexOS ${{ github.ref_name }} — Vanguard Edition
+          
           Official Release of NexOS version ${{ github.ref_name }}.
           
-          **Changes in this version:**
-          - Custom Debian 13 (Trixie) base.
-          - KDE Plasma Desktop.
-          - Pentesting tools suite included.
-          - Server services pre-configured.
+          ### Features
+          - **Base:** Debian 13 (Trixie)
+          - **Desktop:** KDE Plasma with NexOS Premium Dark theme
+          - **Pentesting:** Full suite (Nmap, Wireshark, Metasploit, Hashcat, etc.)
+          - **Installer:** Calamares graphical installer
+          - **Boot:** Hybrid BIOS + UEFI support
+          - **Services:** SSH, Nginx, MariaDB, UFW pre-configured
+          
+          ### Default Credentials
+          - **User:** `nexos`
+          - **Password:** `nexos`
+          
+          ### Checksums
+          Verify your download with the `.sha256` file.
         draft: false
         prerelease: false
       env:

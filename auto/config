@@ -1,0 +1,26 @@
+#!/bin/sh
+# NexOS Auto Configuration Script (Kali-style)
+# This file is called by lb config automatically.
+# All build parameters are centralized here for reproducibility.
+
+set -e
+
+lb config noauto \
+    --architectures amd64 \
+    --distribution trixie \
+    --archive-areas "main contrib non-free non-free-firmware" \
+    --linux-packages "linux-image" \
+    --binary-images iso-hybrid \
+    --bootloaders "syslinux,grub-efi" \
+    --apt-recommends false \
+    --memtest none \
+    --source false \
+    --security false \
+    --updates false \
+    --compression xz \
+    --debootstrap-options "--include=apt-transport-https,ca-certificates,openssl" \
+    --iso-volume "NexOS" \
+    --iso-publisher "NexOS Project; https://github.com/jpscalero/NexOS" \
+    --iso-application "NexOS Live" \
+    --bootappend-live "boot=live components quiet splash hostname=nexos username=nexos user-default-groups=audio,cdrom,dip,floppy,video,plugdev,netdev,sudo,wireshark,bluetooth" \
+    "${@}"

@@ -3,18 +3,19 @@
 chroot/
 binary/
 cache/
-auto/
 local/
 
 # Build artifacts
 *.iso
+*.iso.sha256
+*.iso.md5
 *.zsync
 *.contents
 *.packages
 *.debian.tar.xz
 *.dsc
 *.changes
-*.log
+build.log
 
 # OS generated files
 .DS_Store

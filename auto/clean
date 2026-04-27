@@ -1,0 +1,7 @@
+#!/bin/sh
+# NexOS Auto Clean Script
+# Wrapper for lb clean.
+
+set -e
+
+lb clean noauto "${@}"

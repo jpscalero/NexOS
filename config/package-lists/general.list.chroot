@@ -1,10 +1,4 @@
 # General Software
-firefox-esr
-ffmpeg
-mpv
-p7zip-full
-unzip
-zip
-build-essential
-python3
-python3-pip
+# NOTE: This file is kept for backward compatibility.
+# All packages have been moved to tools.list.chroot and desktop.list.chroot.
+# This file is intentionally empty.

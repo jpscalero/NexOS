@@ -12,10 +12,35 @@ breeze-gtk-theme
 kde-config-gtk-style
 papirus-icon-theme
 plasma-widgets-addons
+
+# Live System (CRITICAL for live boot)
+live-boot
+live-config
+live-config-systemd
+
+# Boot & Login
+plymouth
+plymouth-themes
+sddm-theme-breeze
+
+# QML dependencies for SDDM themes
+qml-module-qtquick2
+qml-module-qtquick-layouts
+qml-module-qtquick-controls2
+
+# Installer (Calamares)
+calamares
+calamares-settings-debian
+
+# Firmware
 firmware-linux
 firmware-linux-nonfree
 firmware-realtek
 firmware-iwlwifi
+firmware-atheros
+firmware-misc-nonfree
+
+# Core Utilities
 sudo
 bash-completion
 fastfetch

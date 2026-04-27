@@ -4,31 +4,62 @@ set -e
 
 echo "Customizing KDE and SDDM for NexOS..."
 
-# 1. SDDM Configuration
+# 1. SDDM Configuration (live-config-fixups handles autologin)
 mkdir -p /etc/sddm.conf.d/
-cat <<EOF > /etc/sddm.conf.d/nexos.conf
-[Theme]
-Current=nexos-sddm
-CursorTheme=breeze_cursors
 
-[General]
-InputMethod=
-EOF
-
-# 2. Force Global Defaults
+# 2. Force Global Defaults for KDE
 echo "Forcing system-wide NexOS Premium UI defaults..."
 mkdir -p /etc/xdg
-# (Already created in config/includes.chroot but ensure permissions)
-chmod 644 /etc/xdg/kdeglobals || true
-chmod 644 /etc/xdg/plasmarc || true
 
-# 3. User skeletal sync optimization
-# This ensures that even if live-config creates the user later, the skeleton is ready.
-if [ -d "/home/nexos" ]; then
-    echo "Pre-syncing NexOS user profile..."
-    cp -rv /etc/skel/.config /home/nexos/ || true
-    cp -rv /etc/skel/.local /home/nexos/ || true
-    chown -R nexos:nexos /home/nexos/
+# Ensure xdg config files have correct permissions
+for f in /etc/xdg/kdeglobals /etc/xdg/plasmarc; do
+    [ -f "$f" ] && chmod 644 "$f"
+done
+
+# 3. Create Plasma Look and Feel fallback defaults
+mkdir -p /etc/xdg
+cat <<EOF > /etc/xdg/plasmarc
+[Theme]
+LookAndFeelPackage=org.kde.nexos.desktop
+EOF
+
+cat <<EOF > /etc/xdg/kdeglobals
+[KDE]
+LookAndFeelPackage=org.kde.nexos.desktop
+
+[General]
+ColorScheme=BreezeDark
+Name=NexOS Premium Dark
+font=Cantarell,10,-1,5,50,0,0,0,0,0
+
+[Icons]
+Theme=Papirus-Dark
+EOF
+
+# 4. Ensure skel has correct config files
+# Copy skel configs from /etc/xdg as baseline
+mkdir -p /etc/skel/.config
+for f in kdeglobals plasmarc; do
+    if [ -f "/etc/xdg/$f" ] && [ ! -f "/etc/skel/.config/$f" ]; then
+        cp "/etc/xdg/$f" "/etc/skel/.config/$f"
+    fi
+done
+
+# 5. Disable KDE Plasma Welcome screen
+mkdir -p /etc/xdg/autostart
+WELCOME_FILE="/etc/xdg/autostart/org.kde.plasma-welcome.desktop"
+if [ -f "$WELCOME_FILE" ]; then
+    if ! grep -q "NoDisplay=true" "$WELCOME_FILE"; then
+        echo "NoDisplay=true" >> "$WELCOME_FILE"
+    fi
+else
+    # Create a dummy to prevent it from appearing
+    cat <<EOF > "$WELCOME_FILE"
+[Desktop Entry]
+Name=Plasma Welcome
+NoDisplay=true
+Hidden=true
+EOF
 fi
 
 echo "KDE NexOS Premium customization complete."

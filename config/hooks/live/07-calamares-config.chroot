@@ -1,0 +1,143 @@
+#!/bin/bash
+# NexOS Calamares Installer Configuration Hook
+# Configures the Calamares graphical installer with NexOS branding.
+
+set -e
+
+echo "Configuring Calamares installer with NexOS branding..."
+
+# 1. Create Calamares branding directory
+BRANDING_DIR="/etc/calamares/branding/nexos"
+mkdir -p "$BRANDING_DIR"
+
+# 2. Create branding descriptor
+cat <<EOF > "$BRANDING_DIR/branding.desc"
+---
+componentName:  nexos
+welcomeStyleCalamares: true
+welcomeExpandingLogo: true
+
+strings:
+    productName:        NexOS
+    shortProductName:   NexOS
+    version:            1.0 Vanguard
+    shortVersion:       1.0
+    versionedName:      NexOS 1.0
+    shortVersionedName: NexOS 1.0
+    bootloaderEntryName: NexOS
+    productUrl:         https://github.com/jpscalero/NexOS
+    supportUrl:         https://github.com/jpscalero/NexOS/issues
+    knownIssuesUrl:     https://github.com/jpscalero/NexOS/issues
+    releaseNotesUrl:    https://github.com/jpscalero/NexOS/releases
+
+images:
+    productLogo:        "logo.png"
+    productIcon:        "logo.png"
+
+slideshow:              "show.qml"
+
+style:
+    sidebarBackground:  "#0d1117"
+    sidebarText:        "#ffffff"
+    sidebarTextSelect:  "#1dc1d1"
+EOF
+
+# 3. Copy logo for Calamares branding
+if [ -f /usr/share/pixmaps/nexos-logo.png ]; then
+    cp /usr/share/pixmaps/nexos-logo.png "$BRANDING_DIR/logo.png"
+fi
+
+# 4. Create a minimal slideshow
+cat <<EOF > "$BRANDING_DIR/show.qml"
+import QtQuick 2.0
+
+Presentation {
+    id: presentation
+
+    Slide {
+        Image {
+            id: background
+            source: "logo.png"
+            width: 200; height: 200
+            fillMode: Image.PreserveAspectFit
+            anchors.centerIn: parent
+        }
+        Text {
+            anchors.horizontalCenter: background.horizontalCenter
+            anchors.top: background.bottom
+            anchors.topMargin: 20
+            text: "Welcome to NexOS"
+            font.pixelSize: 24
+            color: "#1dc1d1"
+        }
+        Text {
+            anchors.horizontalCenter: background.horizontalCenter
+            anchors.top: background.bottom
+            anchors.topMargin: 60
+            text: "Your professional pentesting & development OS."
+            font.pixelSize: 14
+            color: "#ffffff"
+        }
+    }
+}
+EOF
+
+# 5. Configure Calamares settings
+cat <<EOF > /etc/calamares/settings.conf
+---
+modules-search: [ local, /usr/lib/calamares/modules ]
+
+sequence:
+  - show:
+    - welcome
+    - locale
+    - keyboard
+    - partition
+    - users
+    - summary
+  - exec:
+    - partition
+    - mount
+    - unpackfs
+    - machineid
+    - fstab
+    - locale
+    - keyboard
+    - localecfg
+    - users
+    - displaymanager
+    - networkcfg
+    - hwclock
+    - services-systemd
+    - bootloader
+    - umount
+  - show:
+    - finished
+
+branding: nexos
+prompt-install: true
+dont-chroot: false
+EOF
+
+# 6. Create Calamares desktop entry for the live session
+mkdir -p /usr/share/applications
+cat <<EOF > /usr/share/applications/calamares-nexos.desktop
+[Desktop Entry]
+Type=Application
+Name=Install NexOS
+GenericName=System Installer
+Comment=Install NexOS to your hard drive
+Exec=pkexec calamares
+Icon=calamares
+Terminal=false
+StartupNotify=true
+Categories=Qt;System;
+Keywords=installer;calamares;system;
+EOF
+
+# 7. Add installer icon to desktop (via skel)
+mkdir -p /etc/skel/Desktop
+cp /usr/share/applications/calamares-nexos.desktop /etc/skel/Desktop/ 2>/dev/null || true
+chmod +x /etc/skel/Desktop/calamares-nexos.desktop 2>/dev/null || true
+
+echo "Calamares installer configured with NexOS branding."

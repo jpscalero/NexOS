@@ -1,0 +1,104 @@
+#!/bin/bash
+# NexOS Live-Config Fixups Hook
+# Final corrections to ensure the live system works perfectly.
+
+set -e
+
+echo "Applying NexOS live-config fixups..."
+
+# 1. Ensure live-config reads our configuration
+mkdir -p /etc/live/config.conf.d
+
+# 2. Create first-boot script to finalize user environment
+# This runs once when the live system boots, after user creation.
+cat <<'FIRSTBOOT' > /usr/local/bin/nexos-firstboot.sh
+#!/bin/bash
+# NexOS First-Boot Fixup Script
+# Called after the live user has been created by live-config.
+
+NEXOS_USER="nexos"
+NEXOS_HOME="/home/$NEXOS_USER"
+
+# Wait for the user's home to exist
+for i in $(seq 1 30); do
+    [ -d "$NEXOS_HOME" ] && break
+    sleep 1
+done
+
+if [ -d "$NEXOS_HOME" ]; then
+    # Ensure ownership is correct
+    chown -R "$NEXOS_USER:$NEXOS_USER" "$NEXOS_HOME" 2>/dev/null || true
+
+    # Set default wallpaper for Plasma
+    if [ -d "$NEXOS_HOME/.config" ]; then
+        chown -R "$NEXOS_USER:$NEXOS_USER" "$NEXOS_HOME/.config"
+    fi
+
+    # Auto-login to SDDM (live session)
+    if [ -d /etc/sddm.conf.d ]; then
+        cat <<SDDM_CONF > /etc/sddm.conf.d/autologin.conf
+[Autologin]
+User=$NEXOS_USER
+Session=plasma.desktop
+SDDM_CONF
+    fi
+fi
+
+# Disable this service after first run
+systemctl disable nexos-firstboot.service 2>/dev/null || true
+rm -f /etc/systemd/system/nexos-firstboot.service 2>/dev/null || true
+FIRSTBOOT
+chmod +x /usr/local/bin/nexos-firstboot.sh
+
+# 3. Create systemd service for first-boot
+cat <<EOF > /etc/systemd/system/nexos-firstboot.service
+[Unit]
+Description=NexOS First Boot Configuration
+After=multi-user.target live-config.service
+Wants=display-manager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/nexos-firstboot.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable the first-boot service
+WANTS_DIR="/etc/systemd/system/multi-user.target.wants"
+mkdir -p "$WANTS_DIR"
+ln -sf /etc/systemd/system/nexos-firstboot.service "$WANTS_DIR/nexos-firstboot.service"
+
+# 4. Configure SDDM for live session
+mkdir -p /etc/sddm.conf.d
+cat <<EOF > /etc/sddm.conf.d/nexos.conf
+[Theme]
+Current=nexos-sddm
+CursorTheme=breeze_cursors
+
+[General]
+InputMethod=
+
+[Autologin]
+User=nexos
+Session=plasma.desktop
+Relogin=false
+EOF
+
+# 5. Ensure display manager is SDDM
+if command -v update-alternatives >/dev/null 2>&1; then
+    if [ -f /usr/bin/sddm ]; then
+        echo "/usr/bin/sddm" > /etc/X11/default-display-manager 2>/dev/null || true
+    fi
+fi
+
+# 6. Configure locales (Spanish + English)
+if [ -f /etc/locale.gen ]; then
+    sed -i 's/^# *es_ES.UTF-8/es_ES.UTF-8/' /etc/locale.gen
+    sed -i 's/^# *en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
+    locale-gen 2>/dev/null || true
+fi
+
+echo "NexOS live-config fixups applied."

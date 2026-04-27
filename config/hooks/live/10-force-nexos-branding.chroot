@@ -1,31 +1,58 @@
 #!/bin/bash
 # NexOS Force Branding Hook
-# This script runs last to ensure all Debian 13 branding is overriden.
+# This script runs last (before cleanup) to ensure all Debian 13 branding is overridden.
 set -e
 
 echo "Forcing NexOS Total Branding..."
 
 # 1. Plymouth Branding
 echo "Setting NexOS Plymouth theme..."
-if command -v plymouth-set-default-theme >/dev/null; then
-    plymouth-set-default-theme nexos || true
+if command -v plymouth-set-default-theme >/dev/null 2>&1; then
+    plymouth-set-default-theme nexos 2>/dev/null || true
 fi
 
 # 2. GRUB Rebranding
 echo "Updating GRUB branding..."
 if [ -f /etc/default/grub ]; then
-    update-grub || true
+    # Ensure NexOS GRUB distributor
+    sed -i 's/^GRUB_DISTRIBUTOR=.*/GRUB_DISTRIBUTOR="NexOS"/' /etc/default/grub
+    update-grub 2>/dev/null || true
 fi
 
-# 3. Remove Debian Version Strings
-echo "Unbranding system files..."
-sed -i 's/Debian/NexOS/g' /etc/os-release 2>/dev/null || true
+# 3. Enforce os-release (final pass)
+echo "Final pass on system identity files..."
+cat <<EOF > /etc/os-release
+PRETTY_NAME="NexOS v1 (Vanguard)"
+NAME="NexOS"
+VERSION_ID="1"
+VERSION="1 (vanguard)"
+ID=nexos
+ID_LIKE=debian
+HOME_URL="https://github.com/jpscalero/NexOS"
+SUPPORT_URL="https://github.com/jpscalero/NexOS/issues"
+BUG_REPORT_URL="https://github.com/jpscalero/NexOS/issues"
+ANSI_COLOR="0;34"
+EOF
+
 echo "NexOS/1 (Vanguard)" > /etc/debian_version
 
-# 4. Final Alternative Fix
-if command -v update-alternatives >/dev/null; then
-    # Ensure our wallpaper is the default for desktop-background if it exists
-    update-alternatives --install /usr/share/images/desktop-base/desktop-background desktop-background /usr/share/wallpapers/nexos/wallpaper.png 100 || true
+# 4. Wallpaper Alternatives
+if command -v update-alternatives >/dev/null 2>&1; then
+    WALLPAPER="/usr/share/wallpapers/nexos/wallpaper.png"
+    if [ -f "$WALLPAPER" ]; then
+        mkdir -p /usr/share/images/desktop-base
+        update-alternatives --install \
+            /usr/share/images/desktop-base/desktop-background \
+            desktop-background \
+            "$WALLPAPER" 200 2>/dev/null || true
+    fi
 fi
+
+# 5. Final sweep: replace any remaining "Debian" strings in key config files
+for file in /etc/issue /etc/issue.net; do
+    if [ -f "$file" ] && grep -qi "debian" "$file"; then
+        sed -i 's/Debian/NexOS/gi' "$file"
+    fi
+done
 
 echo "NexOS Total Branding applied."

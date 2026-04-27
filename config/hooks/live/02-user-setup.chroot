@@ -1,31 +1,40 @@
 #!/bin/bash
-# Create default user NexOS
+# NexOS User Setup Hook
+# This hook prepares the system-level user configuration.
+# IMPORTANT: The actual user account is created at boot time by live-config.
+# Do NOT use useradd/adduser here - it conflicts with live-config.
+
 set -e
 
-USERNAME="nexos"
-PASSWORD="nexos"
+echo "Preparing NexOS user environment..."
 
-echo "Setting up user: $USERNAME"
-
-# Create user if it doesn't exist
-if ! id "$USERNAME" &>/dev/null; then
-    useradd -m -s /bin/bash "$USERNAME"
-fi
-
-# Set password
-echo "$USERNAME:$PASSWORD" | chpasswd
-
-# Add to essential groups (check existence for robustness)
-for group in sudo audio video cdrom netdev wireshark; do
-    if ! getent group "$group" >/dev/null; then
-        echo "Creating group $group..."
+# 1. Create required system groups (if they don't exist)
+# These groups must exist before live-config tries to add the user to them.
+for group in wireshark bluetooth netdev; do
+    if ! getent group "$group" > /dev/null 2>&1; then
+        echo "Creating system group: $group"
         groupadd -r "$group"
     fi
-    usermod -aG "$group" "$USERNAME"
 done
 
-# Configure passwordless sudo for live session
-echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/nexos
-chmod 0440 /etc/sudoers.d/nexos
+# 2. Configure passwordless sudo for the live session
+mkdir -p /etc/sudoers.d
+cat <<EOF > /etc/sudoers.d/nexos-live
+# NexOS Live Session - passwordless sudo
+# This allows the live user to use sudo without a password.
+nexos ALL=(ALL) NOPASSWD:ALL
+EOF
+chmod 0440 /etc/sudoers.d/nexos-live
 
-echo "User setup complete."
+# 3. Ensure /etc/skel has correct permissions
+# Files from /etc/skel are copied to the user's home by live-config at boot.
+if [ -d /etc/skel ]; then
+    chown -R root:root /etc/skel
+    find /etc/skel -type f -exec chmod 644 {} \;
+    find /etc/skel -type d -exec chmod 755 {} \;
+    # Make shell configs readable
+    chmod 644 /etc/skel/.bashrc 2>/dev/null || true
+    chmod 644 /etc/skel/.bash_profile 2>/dev/null || true
+fi
+
+echo "NexOS user environment prepared successfully."

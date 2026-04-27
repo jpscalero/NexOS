@@ -1,6 +1,7 @@
 #!/bin/bash
 # NexOS Build Script
 # This script orchestrates the creation of the NexOS ISO using live-build.
+# Configuration is delegated to auto/config (Kali-style).
 
 set -e
 
@@ -8,9 +9,11 @@ set -e
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 RED='\033[0;31m'
+YELLOW='\033[1;33m'
 NC='\033[0m'
 
 log() { echo -e "${BLUE}[NexOS]${NC} $1"; }
+warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 error() { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 
 # Root check
@@ -22,43 +25,52 @@ fi
 export DEBIAN_FRONTEND=noninteractive
 
 # 1. Install dependencies if not present
-log "Ensuring dependencies (live-build, debootstrap, curl, isolinux, xorriso) are installed..."
+log "Ensuring build dependencies are installed..."
 apt-get update -qq
-apt-get install -y -qq live-build debootstrap curl isolinux xorriso
+apt-get install -y -qq \
+    live-build debootstrap curl \
+    isolinux syslinux-common syslinux-efi \
+    xorriso dos2unix
 
-# 2. Initialize workspace
-log "Initializing live-build configuration..."
-lb clean --all
+# 2. Normalize line endings (critical when building from Windows-cloned repos)
+log "Normalizing line endings..."
+find . -type f \( -name "*.sh" -o -name "*.chroot" -o -name "*.conf" \) -exec dos2unix {} + 2>/dev/null || true
+find ./auto -type f -exec dos2unix {} + 2>/dev/null || true
 
-# Configuration for Debian 13 (Trixie)
-lb config \
-    --distribution trixie \
-    --archive-areas "main contrib non-free non-free-firmware" \
-    --linux-packages "linux-image" \
-    --binary-images iso-hybrid \
-    --bootloaders "syslinux,grub-efi" \
-    --apt-recommends false \
-    --memtest none \
-    --source false \
-    --security false \
-    --compression xz \
-    --iso-volume "NexOS" \
-    --iso-publisher "NexOS Project" \
-    --iso-application "NexOS Live" \
-    --bootappend-live "boot=live components hostname=nexos username=nexos quiet splash"
+# 3. Ensure auto scripts are executable
+chmod +x auto/config auto/build auto/clean 2>/dev/null || true
+chmod +x config/hooks/live/*.chroot 2>/dev/null || true
 
-# 3. Trigger build
+# 4. Clean previous build
+log "Cleaning previous build state..."
+lb clean --all 2>/dev/null || true
+
+# 5. Run lb config via auto/config
+log "Configuring live-build (via auto/config)..."
+lb config
+
+# 6. Run the build
 log "Starting the build process. This may take 20-45 minutes..."
-lb build
+lb build 2>&1 | tee build.log
 
-# Find the generated ISO (standard name is usually live-image-amd64.hybrid.iso)
+# 7. Find and rename the generated ISO
 GENERATED_ISO=$(ls *.iso 2>/dev/null | head -n 1)
 
 if [ -n "$GENERATED_ISO" ]; then
-    if [ "$GENERATED_ISO" != "nexos-v1-amd64.iso" ]; then
-        mv "$GENERATED_ISO" nexos-v1-amd64.iso
+    FINAL_NAME="nexos-v1-amd64.iso"
+    if [ "$GENERATED_ISO" != "$FINAL_NAME" ]; then
+        mv "$GENERATED_ISO" "$FINAL_NAME"
     fi
-    log "${GREEN}Build successful! ISO generated: nexos-v1-amd64.iso${NC}"
+
+    # Generate checksums
+    log "Generating checksums..."
+    sha256sum "$FINAL_NAME" > "${FINAL_NAME}.sha256"
+    md5sum "$FINAL_NAME" > "${FINAL_NAME}.md5"
+
+    ISO_SIZE=$(du -h "$FINAL_NAME" | cut -f1)
+    log "${GREEN}Build successful!${NC}"
+    log "  ISO: $FINAL_NAME ($ISO_SIZE)"
+    log "  SHA256: $(cat ${FINAL_NAME}.sha256)"
 else
-    error "ISO was not generated. Check logs above for specific errors."
+    error "ISO was not generated. Check build.log for specific errors."
 fi
