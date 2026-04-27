@@ -1,40 +1,46 @@
 #!/bin/bash
-# Hook de Correcciones de Live-Config NexOS
-# Correcciones finales para asegurar que el sistema live funcione perfectamente.
-
+# ============================================================
+#  NexOS — Live-Config Fixups
+#  config/hooks/live/08-live-config-fixups.chroot
+#  Final corrections for perfect live system boot
+# ============================================================
 set -e
 
-echo "Aplicando correcciones de live-config NexOS..."
+echo "[NexOS] Aplicando correcciones de live-config..."
 
-# 1. Asegurar que live-config lea nuestra configuración
+# ── 1. Ensure live-config reads our configuration ─────────
 mkdir -p /etc/live/config.conf.d
 
-# 2. Crear script de primer arranque para finalizar el entorno de usuario
-# Se ejecuta una vez cuando el sistema live arranca, después de la creación del usuario.
+# ── 2. Create first-boot script ──────────────────────────
 cat <<'FIRSTBOOT' > /usr/local/bin/nexos-firstboot.sh
 #!/bin/bash
-# Script de Primer Arranque NexOS
-# Se ejecuta después de que live-config haya creado el usuario live.
+# NexOS First Boot Script
+# Runs after live-config creates the live user
 
 NEXOS_USER="nexos"
 NEXOS_HOME="/home/$NEXOS_USER"
 
-# Esperar a que el home del usuario exista
+# Wait for user home to exist
 for i in $(seq 1 30); do
     [ -d "$NEXOS_HOME" ] && break
     sleep 1
 done
 
 if [ -d "$NEXOS_HOME" ]; then
-    # Asegurar que la propiedad sea correcta
+    # Ensure correct ownership
     chown -R "$NEXOS_USER:$NEXOS_USER" "$NEXOS_HOME" 2>/dev/null || true
 
-    # Establecer wallpaper por defecto para Plasma
+    # Set wallpaper for Plasma
     if [ -d "$NEXOS_HOME/.config" ]; then
         chown -R "$NEXOS_USER:$NEXOS_USER" "$NEXOS_HOME/.config"
     fi
 
-    # Auto-login en SDDM (sesión live)
+    # Set Zsh as user shell if available
+    if command -v zsh >/dev/null 2>&1; then
+        chsh -s /usr/bin/zsh "$NEXOS_USER" 2>/dev/null || true
+    fi
+
+    # Auto-login in SDDM (live session)
     if [ -d /etc/sddm.conf.d ]; then
         cat <<SDDM_CONF > /etc/sddm.conf.d/autologin.conf
 [Autologin]
@@ -44,16 +50,16 @@ SDDM_CONF
     fi
 fi
 
-# Deshabilitar este servicio después de la primera ejecución
+# Disable this service after first run
 systemctl disable nexos-firstboot.service 2>/dev/null || true
 rm -f /etc/systemd/system/nexos-firstboot.service 2>/dev/null || true
 FIRSTBOOT
 chmod +x /usr/local/bin/nexos-firstboot.sh
 
-# 3. Crear servicio systemd para el primer arranque
+# ── 3. Create systemd service for first boot ─────────────
 cat <<EOF > /etc/systemd/system/nexos-firstboot.service
 [Unit]
-Description=Configuración de Primer Arranque NexOS
+Description=NexOS First Boot Configuration
 After=multi-user.target live-config.service
 Wants=display-manager.service
 
@@ -66,13 +72,12 @@ RemainAfterExit=yes
 WantedBy=multi-user.target
 EOF
 
-# Habilitar el servicio de primer arranque
+# Enable first-boot service
 WANTS_DIR="/etc/systemd/system/multi-user.target.wants"
 mkdir -p "$WANTS_DIR"
 ln -sf /etc/systemd/system/nexos-firstboot.service "$WANTS_DIR/nexos-firstboot.service"
 
-# 4. Configurar SDDM para sesión live
-# Usamos tema breeze (compatible con todos los hipervisores incluyendo Hyper-V)
+# ── 4. Configure SDDM for live session ───────────────────
 mkdir -p /etc/sddm.conf.d
 cat <<EOF > /etc/sddm.conf.d/nexos.conf
 [Theme]
@@ -81,6 +86,11 @@ CursorTheme=breeze_cursors
 
 [General]
 InputMethod=
+Numlock=on
+
+[Users]
+MaximumUid=60000
+MinimumUid=1000
 
 [Autologin]
 User=nexos
@@ -88,18 +98,33 @@ Session=plasma
 Relogin=false
 EOF
 
-# 5. Asegurar que el gestor de pantalla sea SDDM
-if command -v update-alternatives >/dev/null 2>&1; then
-    if [ -f /usr/bin/sddm ]; then
-        echo "/usr/bin/sddm" > /etc/X11/default-display-manager 2>/dev/null || true
+# ── 5. Set SDDM as display manager ───────────────────────
+if [ -f /usr/bin/sddm ]; then
+    echo "/usr/bin/sddm" > /etc/X11/default-display-manager 2>/dev/null || true
+fi
+
+# Enable SDDM
+SVC_FILE=""
+for dir in /lib/systemd/system /usr/lib/systemd/system; do
+    if [ -f "$dir/sddm.service" ]; then
+        SVC_FILE="$dir/sddm.service"
+        break
     fi
+done
+if [ -n "$SVC_FILE" ]; then
+    ln -sf "$SVC_FILE" "$WANTS_DIR/sddm.service"
 fi
 
-# 6. Configurar idiomas (Español + Inglés)
+# ── 6. Configure Locales (Spanish + English) ─────────────
 if [ -f /etc/locale.gen ]; then
-    sed -i 's/^# *es_ES.UTF-8/es_ES.UTF-8/' /etc/locale.gen
-    sed -i 's/^# *en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
+    echo "es_ES.UTF-8 UTF-8" >> /etc/locale.gen
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
     locale-gen 2>/dev/null || true
+    update-locale LANG=es_ES.UTF-8 2>/dev/null || true
 fi
 
-echo "Correcciones de live-config NexOS aplicadas."
+# ── 7. Set Timezone ──────────────────────────────────────
+ln -sf /usr/share/zoneinfo/Europe/Madrid /etc/localtime
+echo "Europe/Madrid" > /etc/timezone 2>/dev/null || true
+
+echo "[NexOS] ✅ Correcciones de live-config aplicadas."

@@ -1,38 +1,130 @@
-# Escritorio KDE Plasma y Núcleo
-kde-plasma-desktop
+# ============================================================
+#  NexOS — Desktop & Daily Use Packages
+#  KDE Plasma desktop environment, productivity, and multimedia
+# ============================================================
+
+## Display Manager
 sddm
+sddm-theme-breeze
+
+## KDE Plasma Desktop (Completo)
+kde-plasma-desktop
+plasma-workspace
+plasma-desktop
 plasma-nm
-konsole
+plasma-pa
+plasma-systemmonitor
+plasma-discover
+plasma-firewall
+plasma-thunderbolt
+plasma-vault
+plasma-browser-integration
+plasma-widgets-addons
+kscreen
+powerdevil
+bluedevil
+kde-spectacle
+kinfocenter
+kmenuedit
+systemsettings
+
+## KDE Core Applications
 dolphin
+dolphin-plugins
+konsole
 kate
-network-manager
-network-manager-gnome
-xorg
+ark
+okular
+gwenview
+elisa
+kcalc
+kcolorchooser
+kdialog
+kfind
+kdeconnect
+kwalletmanager
+
+## Appearance & Themes
+breeze
+breeze-icon-theme
 breeze-gtk-theme
+breeze-cursor-theme
+kde-style-breeze
 kde-config-gtk-style
 papirus-icon-theme
-plasma-widgets-addons
+qt5ct
 
-# Sistema Live (CRÍTICO para arranque live)
+## Fonts (Premium Typography)
+fonts-noto
+fonts-noto-color-emoji
+fonts-hack
+fonts-firacode
+fonts-jetbrains-mono
+fonts-cascadia-code
+fonts-inter
+
+## Web Browser
+firefox-esr
+
+## Email
+thunderbird
+
+## Office Suite
+libreoffice-calc
+libreoffice-writer
+libreoffice-impress
+libreoffice-draw
+libreoffice-qt6
+
+## Media Players
+vlc
+mpv
+kamoso
+
+## Graphics & Design
+gimp
+inkscape
+
+## Audio Stack (Pipewire)
+pipewire
+pipewire-audio
+pipewire-pulse
+wireplumber
+pavucontrol-qt
+
+## File Management
+filelight
+partitionmanager
+
+## System Utilities
+flameshot
+xdg-utils
+xdg-user-dirs
+xdg-desktop-portal-kde
+kcharselect
+print-manager
+skanlite
+ktorrent
+
+## Sistema Live (CRÍTICO para arranque live)
 live-boot
 live-config
 live-config-systemd
 
-# Arranque e Inicio de Sesión
+## Arranque e Inicio de Sesión
 plymouth
 plymouth-themes
-sddm-theme-breeze
 
-# Dependencias QML para temas SDDM
+## Dependencias QML para temas SDDM
 qml-module-qtquick2
 qml-module-qtquick-layouts
 qml-module-qtquick-controls2
 
-# Instalador (Calamares)
+## Instalador (Calamares)
 calamares
 calamares-settings-debian
 
-# Firmware
+## Firmware (Soporte universal de hardware)
 firmware-linux
 firmware-linux-nonfree
 firmware-realtek
@@ -40,7 +132,7 @@ firmware-iwlwifi
 firmware-atheros
 firmware-misc-nonfree
 
-# Utilidades Básicas
+## Utilidades Básicas
 sudo
 bash-completion
 fastfetch
@@ -48,3 +140,7 @@ htop
 curl
 wget
 git
+
+## Networking GUI
+network-manager
+network-manager-openvpn

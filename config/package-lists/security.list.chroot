@@ -1,0 +1,64 @@
+# ============================================================
+#  NexOS — Security & Hardening Packages
+#  Firewall, IDS/IPS, auditing, antimalware, and compliance
+# ============================================================
+
+## Firewall
+ufw
+nftables
+
+## Intrusion Prevention / Detection
+fail2ban
+suricata
+
+## Mandatory Access Control
+apparmor
+apparmor-utils
+apparmor-profiles
+apparmor-profiles-extra
+
+## Antimalware & Rootkit Detection
+clamav
+clamav-daemon
+clamav-freshclam
+rkhunter
+chkrootkit
+
+## Security Auditing & Compliance
+lynis
+aide
+debsums
+checksecurity
+
+## System Auditing
+auditd
+
+## Password & Authentication Policies
+libpam-pwquality
+libpam-tmpdir
+libpam-umask
+libpam-google-authenticator
+
+## Automatic Security Updates
+unattended-upgrades
+apt-listchanges
+needrestart
+
+## Encryption
+cryptsetup
+cryptsetup-initramfs
+age
+
+## USB Device Control
+usbguard
+
+## Secure Delete & Wiping
+secure-delete
+wipe
+
+## Entropy
+haveged
+
+## Process Accounting
+acct
+psmisc

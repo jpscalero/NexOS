@@ -1,10 +1,105 @@
-# Software de Servidor
+# ============================================================
+#  NexOS — Server & Infrastructure Packages
+#  Services, containers, orchestration, databases, monitoring
+# ============================================================
+
+## SSH Server
 openssh-server
+mosh
+
+## Web Servers
 nginx
-mariadb-server
-ufw
-net-tools
-dnsutils
-iputils-ping
+apache2
+
+## Reverse Proxy / Load Balancer
+haproxy
+
+## Containers & Orchestration
+docker.io
+docker-compose
+podman
+buildah
+skopeo
+
+## TLS / Certificates
+certbot
+python3-certbot-nginx
+python3-certbot-apache
+openssl
+
+## File Transfer & Sync
 rsync
-fail2ban
+rclone
+lftp
+
+## Firewall Extras
+net-tools
+iputils-ping
+dnsutils
+traceroute
+mtr-tiny
+whois
+socat
+stunnel4
+
+## Monitoring & Performance
+prometheus-node-exporter
+vnstat
+iftop
+nethogs
+bmon
+
+## Log Management & Analysis
+logrotate
+rsyslog
+goaccess
+lnav
+
+## Databases
+sqlite3
+mariadb-server
+mariadb-client
+postgresql
+postgresql-client
+redis-server
+redis-tools
+
+## Message Queue
+rabbitmq-server
+
+## DNS Server
+bind9
+bind9-utils
+
+## DHCP Server
+kea-dhcp4-server
+
+## Mail Server
+postfix
+dovecot-imapd
+dovecot-pop3d
+opendkim
+
+## Backup & Recovery
+borgbackup
+restic
+duplicity
+rdiff-backup
+
+## Configuration Management
+ansible
+
+## Scripting & Automation
+cron
+at
+
+## System Snapshots
+timeshift
+
+## Filesystem Support
+btrfs-progs
+dosfstools
+ntfs-3g
+exfatprogs
+fdisk
+parted

@@ -1,0 +1,27 @@
+#!/bin/bash
+LOG="/var/log/nexos/healthcheck-$(date +%Y%m%d).log"
+mkdir -p /var/log/nexos
+{
+    echo "=== NexOS Health Check - $(date) ==="
+    echo ""
+    echo "--- Disk Usage ---"
+    df -h / /home 2>/dev/null
+    echo ""
+    echo "--- Memory ---"
+    free -h
+    echo ""
+    echo "--- Failed Services ---"
+    systemctl --failed 2>/dev/null
+    echo ""
+    echo "--- Security Updates ---"
+    apt list --upgradable 2>/dev/null | head -20
+    echo ""
+    echo "--- Failed SSH Logins (last 24h) ---"
+    journalctl -u ssh --since "24 hours ago" 2>/dev/null | grep -i "failed" | wc -l
+    echo ""
+    echo "--- UFW Blocked (last 24h) ---"
+    journalctl --since "24 hours ago" 2>/dev/null | grep -i "UFW BLOCK" | wc -l
+} > "$LOG" 2>&1
+
+# Keep only last 30 days
+find /var/log/nexos -name "healthcheck-*.log" -mtime +30 -delete 2>/dev/null || true

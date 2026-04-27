@@ -15,24 +15,26 @@ show_banner() {
 # Ejecutar banner y fastfetch si es interactivo
 if [[ $- == *i* ]]; then
     show_banner
-    fastfetch --logo-type small
+    command -v fastfetch &>/dev/null && fastfetch --logo small
 fi
 
 # 2. Prompt Profesional (PS1)
-# Formato: [nexos@nexos:~/directorio/actual]$
 export PS1="\[\e[1;34m\][\[\e[1;37m\]\u@\h\[\e[1;34m\]:\[\e[1;36m\]\w\[\e[1;34m\]]\[\e[0m\]\$ "
 
-# 3. Alias Útiles
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-alias update-nexos='sudo apt update && sudo apt upgrade'
+# 3. Cargar Aliases Globales de NexOS
+if [ -f /etc/profile.d/nexos-aliases.sh ]; then
+    . /etc/profile.d/nexos-aliases.sh
+fi
 
 # 4. PATH y Opciones del Shell
-export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin:$HOME/.local/bin
 shopt -s autocd
 shopt -s histappend
-HISTFILESIZE=2000
-HISTSIZE=1000
+shopt -s checkwinsize
+HISTFILESIZE=5000
+HISTSIZE=2000
+HISTCONTROL=ignoreboth
+
+# 5. FZF Integration
+[[ -f /usr/share/doc/fzf/examples/key-bindings.bash ]] && \
+    source /usr/share/doc/fzf/examples/key-bindings.bash

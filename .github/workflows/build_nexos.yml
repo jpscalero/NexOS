@@ -28,17 +28,19 @@ jobs:
           live-build debootstrap curl dos2unix sudo \
           plymouth plymouth-themes \
           isolinux syslinux-common syslinux-efi \
-          xorriso coreutils
+          xorriso squashfs-tools coreutils
         
-        # Asegurar finales de línea Linux y permisos de ejecución
+        # Ensure Linux line endings and execution permissions
         find . -name "*.sh" -exec dos2unix {} +
         find . -name "*.chroot" -exec dos2unix {} +
         find . -name "*.conf" -exec dos2unix {} +
+        find . -name "*.toml" -exec dos2unix {} +
         find ./auto -type f -exec dos2unix {} + 2>/dev/null || true
         
         chmod +x build_nexos.sh verify_integrity.sh
         chmod +x auto/config auto/build auto/clean
         chmod +x config/hooks/live/*.chroot
+        chmod +x config/includes.chroot/opt/nexos/*.sh 2>/dev/null || true
 
     - name: Verificar Integridad
       run: ./verify_integrity.sh
@@ -76,14 +78,22 @@ jobs:
           ### Características
           - **Base:** Debian 13 (Trixie)
           - **Escritorio:** KDE Plasma con tema oscuro premium NexOS
-          - **Pentesting:** Suite completa (Nmap, Wireshark, Metasploit, Hashcat, etc.)
+          - **Pentesting:** Suite completa (Nmap, Wireshark, Metasploit, Hashcat, Bettercap, SQLMap, etc.)
+          - **Seguridad:** AppArmor, ClamAV, Suricata IDS, USBGuard, AIDE, Fail2ban, Lynis
+          - **Privacidad:** DNS-over-HTTPS, Tor, I2P, WireGuard, MAC randomization, Firejail
+          - **Servidor:** Docker, PostgreSQL, Redis, MariaDB, Nginx, Apache, Ansible
           - **Instalador:** Instalador gráfico Calamares
           - **Arranque:** Soporte híbrido BIOS + UEFI
-          - **Servicios:** SSH, Nginx, MariaDB, UFW pre-configurados
+          - **Shell:** Zsh con autosuggestions, syntax-highlighting, fzf
           
           ### Credenciales por defecto
           - **Usuario:** `nexos`
           - **Contraseña:** `nexos`
+          
+          ### Herramientas CLI
+          - `nexos-harden` — Asistente de seguridad interactivo
+          - `nexos-clean` — Limpieza y privacidad
+          - `nexos-netmon` — Monitor de red en tiempo real
           
           ### Checksums
           Verifica tu descarga con el archivo `.sha256`.

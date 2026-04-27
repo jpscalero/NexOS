@@ -1,49 +1,128 @@
-# Herramientas Extra NexOS (estilo Kali)
-# Terminales y Shells
+# ============================================================
+#  NexOS — Development & Shell Enhancement Tools
+#  Compilers, runtimes, editors, shell plugins, and utilities
+# ============================================================
+
+## Shells
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
+
+## Terminal Multiplexers
 terminator
 tmux
-zsh
+screen
 
-# Editores
+## Editors (Full Stack)
 vim
+neovim
 nano
 
-# Utilidades de Archivos
-tree
+## Shell Enhancements & Fuzzy Finders
+fzf
+bat
+eza
+ripgrep
+fd-find
 jq
+yq
+
+## Build Tools & Compilers
+build-essential
+cmake
+autoconf
+automake
+pkg-config
+make
+gcc
+g++
+
+## Languages & Runtimes
+python3
+python3-full
+python3-pip
+python3-venv
+python3-dev
+default-jdk
+golang
+rustc
+cargo
+nodejs
+npm
+
+## Version Control
+git
+git-lfs
+tig
+
+## Debugging & Analysis
+gdb
+valgrind
+strace
+ltrace
+hexedit
+
+## Utilidades de Archivos
+tree
 file
 less
 dos2unix
+rename
 
-# Redes y Privacidad
+## Redes y Privacidad
 openvpn
 tor
 proxychains4
 
-# Desarrollo
-build-essential
-python3
-python3-pip
-python3-venv
-
-# Gestión de Archivos y Compresión
+## Gestión de Archivos y Compresión
 p7zip-full
 unzip
 zip
 rar
 unrar
+xz-utils
+zstd
 
-# Multimedia
-firefox-esr
+## Multimedia CLI
 ffmpeg
 mpv
+imagemagick
 
-# Monitorización del Sistema
+## Monitorización del Sistema
 btop
 iotop
 lsof
 strace
+sysstat
+ioping
+fio
+stress-ng
 
-# Varios
+## Terminal Extras & Fun
+fastfetch
+cowsay
+lolcat
+figlet
+toilet
+
+## System Info
+pciutils
+usbutils
+dmidecode
+smartmontools
+inxi
+
+## Flatpak Support
+flatpak
+plasma-discover-backend-flatpak
+
+## Varios
 man-db
+info
 locales
+console-setup
+keyboard-configuration
+ca-certificates
+apt-transport-https
+gnupg
+gnupg2

@@ -1,0 +1,37 @@
+# ============================================================
+#  NexOS — Privacy & Anonymity Packages
+#  DNS privacy, Tor, VPN, MAC spoofing, metadata removal
+# ============================================================
+
+## DNS Privacy (DNS-over-HTTPS)
+dnscrypt-proxy
+
+## Tor Network
+torsocks
+tor-geoipdb
+obfs4proxy
+
+## I2P Anonymous Network
+i2pd
+
+## VPN Tools
+wireguard-tools
+
+## MAC Address Spoofing
+macchanger
+
+## Metadata Cleaning
+mat2
+bleachbit
+libimage-exiftool-perl
+
+## Application Sandboxing
+firejail
+firejail-profiles
+bubblewrap
+
+## Password Manager
+keepassxc
+
+## Privacy Browser Extensions
+webext-ublock-origin-firefox

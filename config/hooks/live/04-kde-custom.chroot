@@ -1,23 +1,25 @@
 #!/bin/bash
-# Personalización de KDE y SDDM para NexOS
+# ============================================================
+#  NexOS — KDE Plasma & SDDM Customization
+#  config/hooks/live/04-kde-custom.chroot
+# ============================================================
 set -e
 
-echo "Personalizando KDE y SDDM para NexOS..."
+echo "[NexOS] Personalizando KDE y SDDM..."
 
-# 1. Configuración de SDDM (live-config-fixups gestiona el auto-login)
+# ── 1. SDDM Configuration ────────────────────────────────
 mkdir -p /etc/sddm.conf.d/
 
-# 2. Forzar valores globales por defecto para KDE
-echo "Forzando valores de UI premium NexOS a nivel de sistema..."
+# ── 2. System-wide KDE defaults ──────────────────────────
+echo "[NexOS] Forzando valores de UI premium a nivel de sistema..."
 mkdir -p /etc/xdg
 
-# Asegurar permisos correctos en archivos de configuración xdg
+# Ensure correct permissions on xdg config files
 for f in /etc/xdg/kdeglobals /etc/xdg/plasmarc; do
     [ -f "$f" ] && chmod 644 "$f"
 done
 
-# 3. Crear valores por defecto del Look and Feel de Plasma
-mkdir -p /etc/xdg
+# ── 3. Plasma Look and Feel defaults ─────────────────────
 cat <<EOF > /etc/xdg/plasmarc
 [Theme]
 LookAndFeelPackage=org.kde.nexos.desktop
@@ -26,18 +28,25 @@ EOF
 cat <<EOF > /etc/xdg/kdeglobals
 [KDE]
 LookAndFeelPackage=org.kde.nexos.desktop
+SingleClick=false
+AnimationDurationFactor=0.5
 
 [General]
 ColorScheme=BreezeDark
 Name=NexOS Premium Dark
-font=Cantarell,10,-1,5,50,0,0,0,0,0
+font=Noto Sans,10,-1,5,50,0,0,0,0,0
+fixed=Hack,11,-1,5,50,0,0,0,0,0
+desktopFont=Noto Sans,10,-1,5,50,0,0,0,0,0
+menuFont=Noto Sans,10,-1,5,50,0,0,0,0,0
+smallestReadableFont=Noto Sans,8,-1,5,50,0,0,0,0,0
+taskbarFont=Noto Sans,10,-1,5,50,0,0,0,0,0
+toolBarFont=Noto Sans,9,-1,5,50,0,0,0,0,0
 
 [Icons]
 Theme=Papirus-Dark
 EOF
 
-# 4. Asegurar que skel tiene los archivos de configuración correctos
-# Copiar configs de skel desde /etc/xdg como base
+# ── 4. Copy xdg configs to skel ──────────────────────────
 mkdir -p /etc/skel/.config
 for f in kdeglobals plasmarc; do
     if [ -f "/etc/xdg/$f" ] && [ ! -f "/etc/skel/.config/$f" ]; then
@@ -45,7 +54,38 @@ for f in kdeglobals plasmarc; do
     fi
 done
 
-# 5. Deshabilitar pantalla de bienvenida de KDE Plasma
+# ── 5. Konsole Default Profile (Premium Terminal) ────────
+mkdir -p /etc/skel/.local/share/konsole
+cat > /etc/skel/.local/share/konsole/NexOS.profile << 'KONSOLE'
+[Appearance]
+ColorScheme=Breeze
+Font=Hack,11,-1,5,50,0,0,0,0,0
+
+[General]
+Name=NexOS
+Parent=FALLBACK/
+Command=/usr/bin/zsh
+TerminalColumns=120
+TerminalRows=35
+
+[Scrolling]
+HistoryMode=2
+ScrollBarPosition=2
+
+[Terminal Features]
+BlinkingCursorEnabled=true
+KONSOLE
+
+cat > /etc/skel/.config/konsolerc << 'KONSOLERC'
+[Desktop Entry]
+DefaultProfile=NexOS.profile
+
+[MainWindow]
+MenuBar=Disabled
+ToolBarsMovable=Disabled
+KONSOLERC
+
+# ── 6. Disable KDE Plasma welcome screen ─────────────────
 mkdir -p /etc/xdg/autostart
 WELCOME_FILE="/etc/xdg/autostart/org.kde.plasma-welcome.desktop"
 if [ -f "$WELCOME_FILE" ]; then
@@ -53,7 +93,6 @@ if [ -f "$WELCOME_FILE" ]; then
         echo "NoDisplay=true" >> "$WELCOME_FILE"
     fi
 else
-    # Crear un archivo dummy para prevenir que aparezca
     cat <<EOF > "$WELCOME_FILE"
 [Desktop Entry]
 Name=Plasma Welcome
@@ -62,4 +101,46 @@ Hidden=true
 EOF
 fi
 
-echo "Personalización premium de KDE NexOS completada."
+# ── 7. Create NexOS Welcome autostart ─────────────────────
+mkdir -p /etc/skel/.config/autostart
+cat > /etc/skel/.config/autostart/nexos-welcome.desktop << 'AUTOSTART'
+[Desktop Entry]
+Type=Application
+Name=NexOS Welcome
+Comment=Script de bienvenida de NexOS
+Exec=/opt/nexos/welcome.sh
+Icon=dialog-information
+Terminal=false
+StartupNotify=false
+X-KDE-autostart-after=panel
+AUTOSTART
+
+# ── 8. Update skel kdeglobals with premium fonts ─────────
+cat > /etc/skel/.config/kdeglobals << 'KDEGLOBALS'
+[KDE]
+LookAndFeelPackage=org.kde.nexos.desktop
+SingleClick=false
+AnimationDurationFactor=0.5
+
+[General]
+ColorScheme=BreezeDark
+Name=NexOS Premium Dark
+font=Noto Sans,10,-1,5,50,0,0,0,0,0
+fixed=Hack,11,-1,5,50,0,0,0,0,0
+desktopFont=Noto Sans,10,-1,5,50,0,0,0,0,0
+menuFont=Noto Sans,10,-1,5,50,0,0,0,0,0
+smallestReadableFont=Noto Sans,8,-1,5,50,0,0,0,0,0
+
+[Icons]
+Theme=Papirus-Dark
+
+[ScreenLocker]
+Wallpaper=file:///usr/share/wallpapers/nexos/wallpaper.png
+KDEGLOBALS
+
+# ── 9. Final permissions ─────────────────────────────────
+chown -R root:root /etc/xdg
+chmod -R 644 /etc/xdg/* || true
+find /etc/xdg -type d -exec chmod 755 {} \;
+
+echo "[NexOS] ✅ Personalización premium de KDE completada."
