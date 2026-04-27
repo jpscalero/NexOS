@@ -1,13 +1,13 @@
 # NexOS .bash_profile
-# This file is sourced by login shells. It ensures .bashrc is loaded
-# for both login and interactive sessions.
+# Este archivo es leído por shells de login. Asegura que .bashrc se cargue
+# tanto para sesiones de login como interactivas.
 
-# Source .bashrc if it exists
+# Cargar .bashrc si existe
 if [ -f "$HOME/.bashrc" ]; then
     . "$HOME/.bashrc"
 fi
 
-# Add user's private bin to PATH if it exists
+# Añadir bin privado del usuario al PATH si existe
 if [ -d "$HOME/.local/bin" ]; then
     PATH="$HOME/.local/bin:$PATH"
 fi

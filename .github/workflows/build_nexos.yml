@@ -1,4 +1,4 @@
-name: Build NexOS ISO
+name: Compilar ISO NexOS
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build ISO
+    name: Compilar ISO
     runs-on: ubuntu-latest
     container:
       image: debian:trixie
@@ -18,10 +18,10 @@ jobs:
       contents: write
     
     steps:
-    - name: Checkout Code
+    - name: Descargar Código
       uses: actions/checkout@v4
 
-    - name: Setup Build Environment
+    - name: Preparar Entorno de Compilación
       run: |
         apt-get update
         apt-get install -y \
@@ -30,7 +30,7 @@ jobs:
           isolinux syslinux-common syslinux-efi \
           xorriso coreutils
         
-        # Ensure scripts have Linux line endings and are executable
+        # Asegurar finales de línea Linux y permisos de ejecución
         find . -name "*.sh" -exec dos2unix {} +
         find . -name "*.chroot" -exec dos2unix {} +
         find . -name "*.conf" -exec dos2unix {} +
@@ -40,15 +40,15 @@ jobs:
         chmod +x auto/config auto/build auto/clean
         chmod +x config/hooks/live/*.chroot
 
-    - name: Verify Integrity
+    - name: Verificar Integridad
       run: ./verify_integrity.sh
 
-    - name: Build ISO
+    - name: Compilar ISO
       run: |
         export DEBIAN_FRONTEND=noninteractive
         ./build_nexos.sh
 
-    - name: Upload ISO Artifact
+    - name: Subir Artifact ISO
       uses: actions/upload-artifact@v4
       with:
         name: NexOS-ISO
@@ -59,7 +59,7 @@ jobs:
         if-no-files-found: error
         retention-days: 7
 
-    - name: Create GitHub Release
+    - name: Crear Release en GitHub
       if: startsWith(github.ref, 'refs/tags/v')
       uses: softprops/action-gh-release@v2
       with:
@@ -67,26 +67,26 @@ jobs:
           nexos-v1-amd64.iso
           nexos-v1-amd64.iso.sha256
           nexos-v1-amd64.iso.md5
-        name: NexOS Release ${{ github.ref_name }}
+        name: NexOS Versión ${{ github.ref_name }}
         body: |
           ## NexOS ${{ github.ref_name }} — Vanguard Edition
           
-          Official Release of NexOS version ${{ github.ref_name }}.
+          Versión oficial de NexOS ${{ github.ref_name }}.
           
-          ### Features
+          ### Características
           - **Base:** Debian 13 (Trixie)
-          - **Desktop:** KDE Plasma with NexOS Premium Dark theme
-          - **Pentesting:** Full suite (Nmap, Wireshark, Metasploit, Hashcat, etc.)
-          - **Installer:** Calamares graphical installer
-          - **Boot:** Hybrid BIOS + UEFI support
-          - **Services:** SSH, Nginx, MariaDB, UFW pre-configured
+          - **Escritorio:** KDE Plasma con tema oscuro premium NexOS
+          - **Pentesting:** Suite completa (Nmap, Wireshark, Metasploit, Hashcat, etc.)
+          - **Instalador:** Instalador gráfico Calamares
+          - **Arranque:** Soporte híbrido BIOS + UEFI
+          - **Servicios:** SSH, Nginx, MariaDB, UFW pre-configurados
           
-          ### Default Credentials
-          - **User:** `nexos`
-          - **Password:** `nexos`
+          ### Credenciales por defecto
+          - **Usuario:** `nexos`
+          - **Contraseña:** `nexos`
           
           ### Checksums
-          Verify your download with the `.sha256` file.
+          Verifica tu descarga con el archivo `.sha256`.
         draft: false
         prerelease: false
       env:

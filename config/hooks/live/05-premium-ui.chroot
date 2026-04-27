@@ -1,11 +1,11 @@
 #!/bin/bash
-# NexOS Premium UI Tweaks
+# Ajustes de UI Premium NexOS
 set -e
 
-echo "Applying NexOS Premium UI Tweaks..."
+echo "Aplicando ajustes de UI Premium NexOS..."
 
-# 1. Disable KDE First Run Wizard
-# This prevents KDE from overwriting our custom /etc/skel or /etc/xdg settings
+# 1. Deshabilitar asistente de primera ejecución de KDE
+# Esto previene que KDE sobrescriba nuestros ajustes de /etc/skel o /etc/xdg
 mkdir -p /etc/xdg/
 cat <<EOF > /etc/xdg/kcmfonts
 [General]
@@ -17,13 +17,13 @@ cat <<EOF > /etc/xdg/knotifyrc
 PopupDuration=5
 EOF
 
-# Disable the "New Features" and "First Run" popups
+# Deshabilitar los popups de "Nuevas Funciones" y "Primera Ejecución"
 mkdir -p /etc/xdg/autostart
 if [ -f /etc/xdg/autostart/org.kde.plasma-welcome.desktop ]; then
     echo "NoDisplay=true" >> /etc/xdg/autostart/org.kde.plasma-welcome.desktop
 fi
 
-# 2. Set default GTK theme to match Breeze Dark
+# 2. Establecer tema GTK por defecto para coincidir con Breeze Dark
 mkdir -p /etc/gtk-3.0
 cat <<EOF > /etc/gtk-3.0/settings.ini
 [Settings]
@@ -33,8 +33,8 @@ gtk-font-name=Cantarell 10
 gtk-application-prefer-dark-theme=1
 EOF
 
-# 3. Fastfetch Branding
-# Create a default fastfetch config for the user
+# 3. Marca de Fastfetch
+# Crear una configuración por defecto de fastfetch para el usuario
 mkdir -p /etc/skel/.config/fastfetch
 cat <<EOF > /etc/skel/.config/fastfetch/config.jsonc
 {
@@ -61,9 +61,9 @@ cat <<EOF > /etc/skel/.config/fastfetch/config.jsonc
 }
 EOF
 
-# 4. Final Permissions Check
+# 4. Verificación final de permisos
 chown -R root:root /etc/xdg
 chmod -R 644 /etc/xdg/* || true
 find /etc/xdg -type d -exec chmod 755 {} \;
 
-echo "NexOS Premium UI Tweaks applied."
+echo "Ajustes de UI Premium NexOS aplicados."

@@ -1,52 +1,52 @@
 #!/bin/bash
-# NexOS Remove Debian Branding Hook
-# This script aggressively removes Debian 13 visual leftovers.
+# Hook de Eliminación de Marca Debian en NexOS
+# Este script elimina agresivamente los restos visuales de Debian 13.
 
 set -e
 
-echo "Removing Debian 13 branding..."
+echo "Eliminando marca de Debian 13..."
 
-# 1. Uninstall desktop-base (contains Debian wallpapers and theme symlinks)
+# 1. Desinstalar desktop-base (contiene fondos de pantalla y symlinks de temas de Debian)
 if dpkg -l desktop-base 2>/dev/null | grep -q "^ii"; then
-    echo "Uninstalling desktop-base..."
+    echo "Desinstalando desktop-base..."
     apt-get remove --purge -y desktop-base 2>/dev/null || true
     apt-get autoremove -y 2>/dev/null || true
 fi
 
-# 2. Clean up residual Debian SDDM themes
+# 2. Limpiar temas SDDM residuales de Debian
 for theme in debian-plasma maya elarun; do
     rm -rf "/usr/share/sddm/themes/$theme"
 done
 
-# 3. Clean up Debian wallpapers
+# 3. Limpiar fondos de pantalla de Debian
 for dir in /usr/share/wallpapers /usr/share/images /usr/share/backgrounds; do
     if [ -d "$dir" ]; then
         find "$dir" -iname "*debian*" -exec rm -rf {} + 2>/dev/null || true
     fi
 done
 
-# 4. Remove Debian logos
+# 4. Eliminar logos de Debian
 rm -f /usr/share/pixmaps/debian-logo.png 2>/dev/null || true
 rm -f /usr/share/pixmaps/debian*.png 2>/dev/null || true
 
-# 5. Set NexOS as default Plymouth theme
+# 5. Establecer NexOS como tema Plymouth por defecto
 if [ -d /usr/share/plymouth/themes/nexos ]; then
-    echo "Setting NexOS Plymouth theme..."
-    # Install the alternative
+    echo "Estableciendo tema Plymouth de NexOS..."
+    # Instalar la alternativa
     update-alternatives --install \
         /usr/share/plymouth/themes/default.plymouth \
         default.plymouth \
         /usr/share/plymouth/themes/nexos/nexos.plymouth 200 2>/dev/null || true
-    # Set it as active
+    # Establecer como activa
     update-alternatives --set default.plymouth \
         /usr/share/plymouth/themes/nexos/nexos.plymouth 2>/dev/null || true
-    # Also try the plymouth command
+    # También intentar con el comando plymouth
     if command -v plymouth-set-default-theme >/dev/null 2>&1; then
         plymouth-set-default-theme nexos 2>/dev/null || true
     fi
 fi
 
-# 6. Remove Debian plymouth themes
+# 6. Eliminar temas plymouth de Debian
 for theme in /usr/share/plymouth/themes/debian*; do
     [ -d "$theme" ] && rm -rf "$theme"
 done
@@ -54,4 +54,4 @@ for theme in /usr/share/plymouth/themes/joy; do
     [ -d "$theme" ] && rm -rf "$theme"
 done
 
-echo "Debian branding removal complete."
+echo "Eliminación de marca Debian completada."

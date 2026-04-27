@@ -1,22 +1,22 @@
 #!/bin/bash
-# KDE and SDDM Customization for NexOS
+# Personalización de KDE y SDDM para NexOS
 set -e
 
-echo "Customizing KDE and SDDM for NexOS..."
+echo "Personalizando KDE y SDDM para NexOS..."
 
-# 1. SDDM Configuration (live-config-fixups handles autologin)
+# 1. Configuración de SDDM (live-config-fixups gestiona el auto-login)
 mkdir -p /etc/sddm.conf.d/
 
-# 2. Force Global Defaults for KDE
-echo "Forcing system-wide NexOS Premium UI defaults..."
+# 2. Forzar valores globales por defecto para KDE
+echo "Forzando valores de UI premium NexOS a nivel de sistema..."
 mkdir -p /etc/xdg
 
-# Ensure xdg config files have correct permissions
+# Asegurar permisos correctos en archivos de configuración xdg
 for f in /etc/xdg/kdeglobals /etc/xdg/plasmarc; do
     [ -f "$f" ] && chmod 644 "$f"
 done
 
-# 3. Create Plasma Look and Feel fallback defaults
+# 3. Crear valores por defecto del Look and Feel de Plasma
 mkdir -p /etc/xdg
 cat <<EOF > /etc/xdg/plasmarc
 [Theme]
@@ -36,8 +36,8 @@ font=Cantarell,10,-1,5,50,0,0,0,0,0
 Theme=Papirus-Dark
 EOF
 
-# 4. Ensure skel has correct config files
-# Copy skel configs from /etc/xdg as baseline
+# 4. Asegurar que skel tiene los archivos de configuración correctos
+# Copiar configs de skel desde /etc/xdg como base
 mkdir -p /etc/skel/.config
 for f in kdeglobals plasmarc; do
     if [ -f "/etc/xdg/$f" ] && [ ! -f "/etc/skel/.config/$f" ]; then
@@ -45,7 +45,7 @@ for f in kdeglobals plasmarc; do
     fi
 done
 
-# 5. Disable KDE Plasma Welcome screen
+# 5. Deshabilitar pantalla de bienvenida de KDE Plasma
 mkdir -p /etc/xdg/autostart
 WELCOME_FILE="/etc/xdg/autostart/org.kde.plasma-welcome.desktop"
 if [ -f "$WELCOME_FILE" ]; then
@@ -53,7 +53,7 @@ if [ -f "$WELCOME_FILE" ]; then
         echo "NoDisplay=true" >> "$WELCOME_FILE"
     fi
 else
-    # Create a dummy to prevent it from appearing
+    # Crear un archivo dummy para prevenir que aparezca
     cat <<EOF > "$WELCOME_FILE"
 [Desktop Entry]
 Name=Plasma Welcome
@@ -62,4 +62,4 @@ Hidden=true
 EOF
 fi
 
-echo "KDE NexOS Premium customization complete."
+echo "Personalización premium de KDE NexOS completada."

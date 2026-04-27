@@ -1,4 +1,4 @@
-# General Software
-# NOTE: This file is kept for backward compatibility.
-# All packages have been moved to tools.list.chroot and desktop.list.chroot.
-# This file is intentionally empty.
+# Software General
+# NOTA: Este archivo se mantiene por compatibilidad.
+# Todos los paquetes han sido movidos a tools.list.chroot y desktop.list.chroot.
+# Este archivo está intencionalmente vacío.

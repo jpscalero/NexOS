@@ -1,7 +1,7 @@
 #!/bin/sh
-# NexOS Auto Configuration Script (Kali-style)
-# This file is called by lb config automatically.
-# All build parameters are centralized here for reproducibility.
+# Script de Configuración Automática de NexOS (estilo Kali)
+# Este archivo es invocado por lb config automáticamente.
+# Todos los parámetros de compilación están centralizados aquí para reproducibilidad.
 
 set -e
 

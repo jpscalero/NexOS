@@ -1,4 +1,4 @@
-# KDE Plasma Desktop & Core
+# Escritorio KDE Plasma y Núcleo
 kde-plasma-desktop
 sddm
 plasma-nm
@@ -13,22 +13,22 @@ kde-config-gtk-style
 papirus-icon-theme
 plasma-widgets-addons
 
-# Live System (CRITICAL for live boot)
+# Sistema Live (CRÍTICO para arranque live)
 live-boot
 live-config
 live-config-systemd
 
-# Boot & Login
+# Arranque e Inicio de Sesión
 plymouth
 plymouth-themes
 sddm-theme-breeze
 
-# QML dependencies for SDDM themes
+# Dependencias QML para temas SDDM
 qml-module-qtquick2
 qml-module-qtquick-layouts
 qml-module-qtquick-controls2
 
-# Installer (Calamares)
+# Instalador (Calamares)
 calamares
 calamares-settings-debian
 
@@ -40,7 +40,7 @@ firmware-iwlwifi
 firmware-atheros
 firmware-misc-nonfree
 
-# Core Utilities
+# Utilidades Básicas
 sudo
 bash-completion
 fastfetch

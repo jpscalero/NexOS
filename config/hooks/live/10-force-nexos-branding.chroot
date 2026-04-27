@@ -1,26 +1,27 @@
 #!/bin/bash
-# NexOS Force Branding Hook
-# This script runs last (before cleanup) to ensure all Debian 13 branding is overridden.
+# Hook de Forzar Marca NexOS
+# Este script se ejecuta al final (antes de la limpieza) para asegurar
+# que toda la marca de Debian 13 sea sobreescrita.
 set -e
 
-echo "Forcing NexOS Total Branding..."
+echo "Forzando marca total de NexOS..."
 
-# 1. Plymouth Branding
-echo "Setting NexOS Plymouth theme..."
+# 1. Marca de Plymouth
+echo "Estableciendo tema Plymouth de NexOS..."
 if command -v plymouth-set-default-theme >/dev/null 2>&1; then
     plymouth-set-default-theme nexos 2>/dev/null || true
 fi
 
-# 2. GRUB Rebranding
-echo "Updating GRUB branding..."
+# 2. Remarca de GRUB
+echo "Actualizando marca de GRUB..."
 if [ -f /etc/default/grub ]; then
-    # Ensure NexOS GRUB distributor
+    # Asegurar distribuidor GRUB de NexOS
     sed -i 's/^GRUB_DISTRIBUTOR=.*/GRUB_DISTRIBUTOR="NexOS"/' /etc/default/grub
     update-grub 2>/dev/null || true
 fi
 
-# 3. Enforce os-release (final pass)
-echo "Final pass on system identity files..."
+# 3. Reforzar os-release (pasada final)
+echo "Pasada final en archivos de identidad del sistema..."
 cat <<EOF > /etc/os-release
 PRETTY_NAME="NexOS v1 (Vanguard)"
 NAME="NexOS"
@@ -36,7 +37,7 @@ EOF
 
 echo "NexOS/1 (Vanguard)" > /etc/debian_version
 
-# 4. Wallpaper Alternatives
+# 4. Alternativas de fondo de pantalla
 if command -v update-alternatives >/dev/null 2>&1; then
     WALLPAPER="/usr/share/wallpapers/nexos/wallpaper.png"
     if [ -f "$WALLPAPER" ]; then
@@ -48,11 +49,11 @@ if command -v update-alternatives >/dev/null 2>&1; then
     fi
 fi
 
-# 5. Final sweep: replace any remaining "Debian" strings in key config files
+# 5. Barrido final: reemplazar cadenas "Debian" restantes en archivos clave
 for file in /etc/issue /etc/issue.net; do
     if [ -f "$file" ] && grep -qi "debian" "$file"; then
         sed -i 's/Debian/NexOS/gi' "$file"
     fi
 done
 
-echo "NexOS Total Branding applied."
+echo "Marca total de NexOS aplicada."

@@ -1,6 +1,6 @@
 #!/bin/sh
-# NexOS Auto Build Script
-# Wrapper for lb build with logging.
+# Script de Compilación Automática de NexOS
+# Wrapper para lb build con registro de logs.
 
 set -e
 

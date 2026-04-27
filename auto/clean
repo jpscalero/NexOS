@@ -1,6 +1,6 @@
 #!/bin/sh
-# NexOS Auto Clean Script
-# Wrapper for lb clean.
+# Script de Limpieza Automática de NexOS
+# Wrapper para lb clean.
 
 set -e
 

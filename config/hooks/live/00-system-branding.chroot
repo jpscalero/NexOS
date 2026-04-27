@@ -1,12 +1,12 @@
 #!/bin/bash
-# NexOS System Branding Hook
-# This script replaces Debian strings with NexOS branding.
+# Hook de Marca del Sistema NexOS
+# Este script reemplaza las cadenas de Debian con la marca NexOS.
 
 set -e
 
-echo "Applying NexOS System Branding..."
+echo "Aplicando marca del sistema NexOS..."
 
-# 1. Update /etc/os-release
+# 1. Actualizar /etc/os-release
 cat <<EOF > /etc/os-release
 PRETTY_NAME="NexOS v1 (Vanguard)"
 NAME="NexOS"
@@ -20,7 +20,7 @@ BUG_REPORT_URL="https://github.com/jpscalero/NexOS/issues"
 ANSI_COLOR="0;34"
 EOF
 
-# 2. Update /etc/lsb-release
+# 2. Actualizar /etc/lsb-release
 cat <<EOF > /etc/lsb-release
 DISTRIB_ID=NexOS
 DISTRIB_RELEASE=1
@@ -28,11 +28,11 @@ DISTRIB_CODENAME=vanguard
 DISTRIB_DESCRIPTION="NexOS Vanguard Edition"
 EOF
 
-# 3. Update /etc/issue and /etc/issue.net
+# 3. Actualizar /etc/issue y /etc/issue.net
 echo "NexOS \n \l" > /etc/issue
 echo "NexOS %h" > /etc/issue.net
 
-# 4. Professional /etc/motd
+# 4. MOTD profesional
 cat <<EOF > /etc/motd
   _   _             ____  ____  
  | \ | | _____  __/ __ \/ ___| 
@@ -40,23 +40,23 @@ cat <<EOF > /etc/motd
  | |\  |  __/>  <| |__| |___) |
  |_| \_|\___/_/\_\\____/|____/ 
 
- Welcome to NexOS Vanguard Edition
- Based on Debian 13 (Trixie) - Full Pentesting Suite
+ Bienvenido a NexOS Vanguard Edition
+ Basado en Debian 13 (Trixie) - Suite completa de Pentesting
 
- * Project: https://github.com/jpscalero/NexOS
- * Support: https://github.com/jpscalero/NexOS/issues
+ * Proyecto: https://github.com/jpscalero/NexOS
+ * Soporte:  https://github.com/jpscalero/NexOS/issues
 
- This system is for authorized testing and educational purposes.
- Be safe. Be ethical.
+ Este sistema es para pruebas autorizadas y fines educativos.
+ Sé seguro. Sé ético.
 
 EOF
 
-# 4. Branding for Hostname (fallback)
+# 5. Marca para Hostname (respaldo)
 echo "nexos" > /etc/hostname
 
-# 5. Fix Debian specific links if necessary
+# 6. Corregir enlaces específicos de Debian si es necesario
 if [ -f /etc/debian_version ]; then
-    echo "NexOS/1 (based on Debian $(cat /etc/debian_version))" > /etc/debian_version
+    echo "NexOS/1 (basado en Debian $(cat /etc/debian_version))" > /etc/debian_version
 fi
 
-echo "NexOS System Branding applied successfully."
+echo "Marca del sistema NexOS aplicada correctamente."
