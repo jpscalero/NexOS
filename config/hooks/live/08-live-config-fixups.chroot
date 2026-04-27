@@ -39,7 +39,7 @@ if [ -d "$NEXOS_HOME" ]; then
         cat <<SDDM_CONF > /etc/sddm.conf.d/autologin.conf
 [Autologin]
 User=$NEXOS_USER
-Session=plasma.desktop
+Session=plasma
 SDDM_CONF
     fi
 fi
@@ -72,10 +72,11 @@ mkdir -p "$WANTS_DIR"
 ln -sf /etc/systemd/system/nexos-firstboot.service "$WANTS_DIR/nexos-firstboot.service"
 
 # 4. Configurar SDDM para sesión live
+# Usamos tema breeze (compatible con todos los hipervisores incluyendo Hyper-V)
 mkdir -p /etc/sddm.conf.d
 cat <<EOF > /etc/sddm.conf.d/nexos.conf
 [Theme]
-Current=nexos-sddm
+Current=breeze
 CursorTheme=breeze_cursors
 
 [General]
@@ -83,7 +84,7 @@ InputMethod=
 
 [Autologin]
 User=nexos
-Session=plasma.desktop
+Session=plasma
 Relogin=false
 EOF
 
