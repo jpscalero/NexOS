@@ -4,55 +4,27 @@
 # ============================================================
 
 ## Display Manager
-sddm
-sddm-theme-breeze
+lightdm
+lightdm-gtk-greeter
+lightdm-gtk-greeter-settings
 
-## KDE Plasma Desktop (Completo)
-kde-plasma-desktop
-plasma-workspace
-plasma-desktop
-plasma-nm
-plasma-pa
-plasma-systemmonitor
-plasma-discover
-plasma-firewall
-plasma-thunderbolt
-plasma-vault
-plasma-browser-integration
-plasma-widgets-addons
-kscreen
-powerdevil
-bluedevil
-kde-spectacle
-kinfocenter
-kmenuedit
-systemsettings
-
-## KDE Core Applications
-dolphin
-dolphin-plugins
-konsole
-kate
-ark
-okular
-gwenview
-elisa
-kcalc
-kcolorchooser
-kdialog
-kfind
-kdeconnect
-kwalletmanager
+## XFCE4 Desktop (Minimalista)
+xfce4
+xfce4-goodies
+xfce4-terminal
+xfce4-taskmanager
+xfce4-whiskermenu-plugin
+xfce4-screenshooter
+thunar-archive-plugin
+thunar-media-tags-plugin
+gvfs-backends
+mousepad
+ristretto
 
 ## Appearance & Themes
-breeze
-breeze-icon-theme
-breeze-gtk-theme
-breeze-cursor-theme
-kde-style-breeze
-kde-config-gtk-style
+greybird-gtk-theme
+numix-icon-theme
 papirus-icon-theme
-qt5ct
 
 ## Fonts (Premium Typography)
 fonts-noto
