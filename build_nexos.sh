@@ -58,7 +58,7 @@ find ./auto -type f -exec dos2unix {} + 2>/dev/null || true
 # 3. Ensure auto scripts and hooks are executable
 chmod +x auto/config auto/build auto/clean 2>/dev/null || true
 chmod +x config/hooks/live/*.chroot 2>/dev/null || true
-chmod +x config/includes.chroot/opt/nexos/*.sh 2>/dev/null || true
+find config/includes.chroot -type f -name "*.sh" -exec chmod +x {} + 2>/dev/null || true
 
 # 4. Clean previous build
 log "Limpiando estado de compilación anterior..."

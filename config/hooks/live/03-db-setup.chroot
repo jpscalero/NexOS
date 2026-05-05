@@ -7,10 +7,10 @@ set -e
 
 echo "=> Configurando PostgreSQL y MariaDB (Optimizaciones y Auditoría)..."
 
-# Ensure the DB directories exist (though packages should create them)
-if [ -d /etc/mysql/mariadb.conf.d ]; then
-    echo "Configurando MariaDB..."
-    cat <<EOF > /etc/mysql/mariadb.conf.d/99-nexos-tuning.cnf
+# Ensure MariaDB config directory exists
+mkdir -p /etc/mysql/mariadb.conf.d
+echo "Configurando MariaDB..."
+cat <<EOF > /etc/mysql/mariadb.conf.d/99-nexos-tuning.cnf
 [mysqld]
 # NexOS Tuning for High-Performance Data Management
 innodb_buffer_pool_size = 512M
@@ -18,7 +18,6 @@ innodb_log_file_size = 128M
 query_cache_size = 0
 query_cache_type = 0
 EOF
-fi
 
 if [ -d /etc/postgresql ]; then
     PG_VER=$(ls /etc/postgresql | head -n 1)

@@ -19,6 +19,7 @@ TARGET_WALLPAPER="/usr/share/backgrounds/nexos-wallpaper.jpg"
 if [ ! -f "$TARGET_WALLPAPER" ]; then
     # Si no hay imagen provista, se usará el default del sistema.
     # Pero dejamos el sistema preparado.
+    mkdir -p "/usr/share/backgrounds"
     touch "$TARGET_WALLPAPER"
 fi
 
