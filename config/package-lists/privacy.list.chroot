@@ -20,7 +20,8 @@ wireguard-tools
 ## MAC Address Spoofing
 macchanger
 
-## Metadata Cleaning
+## Metadata Cleaning & Secure Delete
+secure-delete
 mat2
 bleachbit
 libimage-exiftool-perl

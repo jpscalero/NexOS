@@ -1,0 +1,24 @@
+image: debian:trixie
+
+stages:
+  - build
+
+build_iso:
+  stage: build
+  tags:
+    - docker
+  # live-build requires privileges to mount filesystems (proc, sysfs) in chroot
+  # Your GitLab runner must be configured with privileged = true in config.toml
+  before_script:
+    - apt-get update
+    - apt-get install -y sudo live-build debootstrap squashfs-tools xorriso grub-pc-bin grub-efi-amd64-bin mtools
+  script:
+    - chmod +x ./build_nexos.sh
+    - ./build_nexos.sh
+  artifacts:
+    name: "nexos-trixie-iso"
+    paths:
+      - "*.iso"
+    expire_in: 1 week
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"

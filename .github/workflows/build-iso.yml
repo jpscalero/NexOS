@@ -1,0 +1,38 @@
+name: Build NexOS ISO
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build ISO in Debian Trixie Container
+        uses: addnab/docker-run-action@v3
+        with:
+          image: debian:trixie
+          options: --privileged -v ${{ github.workspace }}:/workspace -w /workspace
+          run: |
+            apt-get update
+            # Install live-build and dependencies
+            apt-get install -y sudo live-build debootstrap squashfs-tools xorriso grub-pc-bin grub-efi-amd64-bin mtools
+            
+            # Make sure build script is executable
+            chmod +x ./build_nexos.sh
+            
+            # Execute build
+            ./build_nexos.sh
+
+      - name: Upload ISO Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexos-trixie-iso
+          path: "*.iso"
+          retention-days: 7

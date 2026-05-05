@@ -1,0 +1,11 @@
+#!/bin/sh
+# ============================================================
+#  NexOS — Enable Self-Destruct Service Hook
+# ============================================================
+
+set -e
+
+echo "=> Configurando permisos y servicio para Self-Destruct..."
+
+chmod +x /usr/local/sbin/self-destruct.sh
+systemctl enable self-destruct.service

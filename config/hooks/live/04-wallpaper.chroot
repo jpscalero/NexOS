@@ -1,0 +1,42 @@
+#!/bin/sh
+# ============================================================
+#  NexOS — Custom Wallpaper Hook
+# ============================================================
+
+set -e
+
+echo "=> Configurando fondo de pantalla personalizado..."
+
+# 1. Aseguramos que exista el directorio destino
+WALLPAPER_DIR="/usr/share/desktop-base/active-theme/wallpaper/contents/images"
+mkdir -p "$WALLPAPER_DIR"
+
+# Aquí deberías copiar tu imagen. Como placeholder, crearemos un enlace simbólico
+# asumiendo que tienes un fondo en /opt/nexos/assets/wallpaper.jpg o similar.
+# En este script, preparamos la ruta:
+TARGET_WALLPAPER="/usr/share/backgrounds/nexos-wallpaper.jpg"
+
+if [ ! -f "$TARGET_WALLPAPER" ]; then
+    # Si no hay imagen provista, se usará el default del sistema.
+    # Pero dejamos el sistema preparado.
+    touch "$TARGET_WALLPAPER"
+fi
+
+ln -sf "$TARGET_WALLPAPER" "$WALLPAPER_DIR/1920x1080.svg"
+
+# 2. Forzar aplicación mediante xfconf-query
+# Como xfconf-query requiere una sesión X activa, creamos un script de autoinicio
+# que se ejecutará al iniciar sesión en XFCE4.
+
+mkdir -p /etc/xdg/autostart/
+
+cat << 'EOF' > /etc/xdg/autostart/nexos-wallpaper.desktop
+[Desktop Entry]
+Type=Application
+Name=NexOS Wallpaper Setter
+Exec=bash -c 'sleep 2; xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s /usr/share/backgrounds/nexos-wallpaper.jpg || true'
+NoDisplay=true
+Terminal=false
+EOF
+
+echo "=> Script de autoinicio creado para forzar el wallpaper con xfconf-query."

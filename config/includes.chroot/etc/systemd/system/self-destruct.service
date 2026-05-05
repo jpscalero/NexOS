@@ -1,0 +1,14 @@
+[Unit]
+Description=NexOS Self-Destruct (RAM & DB wipe)
+DefaultDependencies=no
+Before=shutdown.target halt.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/self-destruct.sh
+TimeoutSec=300
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=halt.target shutdown.target

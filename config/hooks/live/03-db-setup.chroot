@@ -1,0 +1,38 @@
+#!/bin/sh
+# ============================================================
+#  NexOS — DB Setup Hook (PostgreSQL & MariaDB)
+# ============================================================
+
+set -e
+
+echo "=> Configurando PostgreSQL y MariaDB (Optimizaciones y Auditoría)..."
+
+# Ensure the DB directories exist (though packages should create them)
+if [ -d /etc/mysql/mariadb.conf.d ]; then
+    echo "Configurando MariaDB..."
+    cat <<EOF > /etc/mysql/mariadb.conf.d/99-nexos-tuning.cnf
+[mysqld]
+# NexOS Tuning for High-Performance Data Management
+innodb_buffer_pool_size = 512M
+innodb_log_file_size = 128M
+query_cache_size = 0
+query_cache_type = 0
+EOF
+fi
+
+if [ -d /etc/postgresql ]; then
+    PG_VER=$(ls /etc/postgresql | head -n 1)
+    if [ -n "$PG_VER" ]; then
+        echo "Configurando PostgreSQL $PG_VER..."
+        PG_CONF="/etc/postgresql/$PG_VER/main/postgresql.conf"
+        if [ -f "$PG_CONF" ]; then
+            sed -i "s/#shared_buffers = 128MB/shared_buffers = 512MB/g" "$PG_CONF"
+            sed -i "s/#work_mem = 4MB/work_mem = 16MB/g" "$PG_CONF"
+            sed -i "s/#maintenance_work_mem = 64MB/maintenance_work_mem = 128MB/g" "$PG_CONF"
+        fi
+    fi
+fi
+
+# The SQL audit file /opt/nexos/sql/optimize_audit.sql will be available 
+# for the user to run once the live system boots and services are active.
+echo "=> Configuración de bases de datos inyectada. Ejecute /opt/nexos/sql/optimize_audit.sql post-arranque para roles de auditoría."
