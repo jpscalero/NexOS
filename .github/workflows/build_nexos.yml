@@ -77,7 +77,7 @@ jobs:
           
           ### Características
           - **Base:** Debian 13 (Trixie)
-          - **Escritorio:** KDE Plasma con tema oscuro premium NexOS
+          - **Escritorio:** XFCE4 Minimalista y de Alto Rendimiento
           - **Pentesting:** Suite completa (Nmap, Wireshark, Metasploit, Hashcat, Bettercap, SQLMap, etc.)
           - **Seguridad:** AppArmor, ClamAV, Suricata IDS, USBGuard, AIDE, Fail2ban, Lynis
           - **Privacidad:** DNS-over-HTTPS, Tor, I2P, WireGuard, MAC randomization, Firejail
